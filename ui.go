@@ -161,11 +161,16 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 }
 
 func (b *Barnard) OnUiResize(ui *uiterm.Ui, width, height int) {
-	ui.SetBounds(uiViewLogo, 0, 0, 9, 1)
-	ui.SetBounds(uiViewTop, 9, 0, width-6, 1)
-	ui.SetBounds(uiViewStatus, width-6, 0, width, 1)
-	ui.SetBounds(uiViewInput, 0, height-1, width, height)
-	ui.SetBounds(uiViewInputStatus, 0, height-2, width, height-1)
-	ui.SetBounds(uiViewOutput, 0, 1, width-20, height-2)
-	ui.SetBounds(uiViewTree, width-20, 1, width, height-2)
+//	ui.SetBounds(uiViewLogo, 0, 0, 9, 1)
+//	ui.SetBounds(uiViewTop, 9, 0, width-6, 1)
+	ui.SetBounds(uiViewStatus, 0,hight-2, width, hight-1);
+//width-6, 0, width, 1)
+	ui.SetBounds(uiViewInput, 12, height-1, width, height);
+//0, height-1, width, height)
+	ui.SetBounds(uiViewInputStatus, 0, height-1, 11, height);
+//0, height-2, width, height-1)
+	ui.SetBounds(uiViewOutput, 0, height-22, width, height-2);
+//0, 1, width-20, height-2)
+	ui.SetBounds(uiViewTree, 0, 1, width, 10);
+//width-20, 1, width, height-2)
 }
