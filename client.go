@@ -40,7 +40,7 @@ func (b *Barnard) OnConnect(e *gumble.ConnectEvent) {
 	b.UiTree.Rebuild()
 	b.Ui.Refresh()
 
-	b.UpdateInputStatus(fmt.Sprintf("To: %s", e.Client.Self.Channel.Name))
+	b.UpdateInputStatus(fmt.Sprintf("[%s]", e.Client.Self.Channel.Name))
 	b.AddOutputLine(fmt.Sprintf("Connected to %s", b.Client.Conn.RemoteAddr()))
 	if e.WelcomeMessage != nil {
 		b.AddOutputLine(fmt.Sprintf("Welcome message: %s", esc(*e.WelcomeMessage)))
@@ -68,7 +68,7 @@ func (b *Barnard) OnTextMessage(e *gumble.TextMessageEvent) {
 
 func (b *Barnard) OnUserChange(e *gumble.UserChangeEvent) {
 	if e.Type.Has(gumble.UserChangeChannel) && e.User == b.Client.Self {
-		b.UpdateInputStatus(fmt.Sprintf("To: %s", e.User.Channel.Name))
+		b.UpdateInputStatus(fmt.Sprintf("[%s]", e.User.Channel.Name))
 	}
 	b.UiTree.Rebuild()
 	b.Ui.Refresh()

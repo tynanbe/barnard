@@ -85,7 +85,6 @@ func (ui *Ui) SetActive(name string) {
 	if element != nil {
 		element.View.uiSetActive(true)
 	}
-	ui.Refresh()
 }
 
 func (ui *Ui) Run() error {

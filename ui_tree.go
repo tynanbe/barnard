@@ -1,7 +1,7 @@
 package main
 
 import (
-	"layeh.com/barnard/uiterm"
+	"github.com/bmmcginty/barnard/uiterm"
 	"layeh.com/gumble/gumble"
 )
 

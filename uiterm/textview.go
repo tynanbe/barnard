@@ -113,41 +113,30 @@ func (t *Textview) uiDraw() {
 	defer t.ui.endDraw()
 
 	var reader *strings.Reader
-	line := len(t.parsedLines) - 1 - t.CurrentLine
-	if line < 0 {
-		line = 0
-	}
-	totalLines := len(t.parsedLines)
-	if totalLines == 0 {
-		totalLines = 1
-	}
-	currentScrollLine := t.y1 - 1 - int((float32(t.CurrentLine)/float32(totalLines))*float32(t.y1-t.y0))
-	for y := t.y1 - 1; y >= t.y0; y-- {
-		if t.parsedLines != nil && line >= 0 {
-			reader = strings.NewReader(t.parsedLines[line])
+writeableLines := t.y1-t.y0;
+lineNum := 0;
+if (writeableLines < len(t.parsedLines) ) {
+lineNum = len(t.parsedLines)-writeableLines;
+}
+//Beep()
+for y:=0; y<writeableLines; y++ {
+if (lineNum<len(t.parsedLines)) {
+			reader = strings.NewReader(t.parsedLines[lineNum])
 		} else {
 			reader = nil
 		}
 		for x := t.x0; x < t.x1; x++ {
 			var chr rune = ' '
-			if x == t.x1-1 { // scrollbar
-				if y == currentScrollLine {
-					chr = '█'
-				} else {
-					chr = '░'
-				}
-			} else if x < t.x1-3 {
 				if reader != nil {
 					if ch, _, err := reader.ReadRune(); err == nil {
 						chr = ch
-					}
-				}
-			}
+					} //no err
+				} //reader != nil
 			termbox.SetCell(x, y, chr, termbox.Attribute(t.Fg), termbox.Attribute(t.Bg))
-		}
-		line--
-	}
-}
+		} //each x
+lineNum++
+	} //each y
+} //func
 
 func (t *Textview) uiKeyEvent(mod Modifier, key Key) {
 }

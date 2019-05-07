@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"layeh.com/barnard/uiterm"
+ "github.com/bmmcginty/barnard/uiterm"
 	"layeh.com/gumble/gumble"
 	_ "layeh.com/gumble/opus"
 )

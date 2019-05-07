@@ -1,12 +1,14 @@
 package main
 
 import (
+	"github.com/nsf/termbox-go"
+"os/exec"
 	"fmt"
 	"strings"
 	"time"
 
 	"github.com/kennygrant/sanitize"
-	"layeh.com/barnard/uiterm"
+	"github.com/bmmcginty/barnard/uiterm"
 	"layeh.com/gumble/gumble"
 )
 
@@ -19,6 +21,16 @@ const (
 	uiViewOutput      = "output"
 	uiViewTree        = "tree"
 )
+
+func beep () {
+cmd := exec.Command("beep");
+cmdout, err := cmd.Output();
+if (err!=nil) {
+panic(err);
+}
+if(cmdout!=nil) {
+}
+}
 
 func esc(str string) string {
 	return sanitize.HTML(str)
@@ -90,6 +102,9 @@ func (b *Barnard) OnFocusPress(ui *uiterm.Ui, key uiterm.Key) {
 	} else if active == uiViewTree {
 		b.Ui.SetActive(uiViewInput)
 	}
+	width, height := termbox.Size();
+b.OnUiResize(ui, width, height);
+ui.Refresh();
 }
 
 func (b *Barnard) OnTextInput(ui *uiterm.Ui, textbox *uiterm.Textbox, text string) {
@@ -161,16 +176,26 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 }
 
 func (b *Barnard) OnUiResize(ui *uiterm.Ui, width, height int) {
+treeHeight := 0;
+outputHeight := 0;
+	active := b.Ui.Active()
+if (active == uiViewTree ) {
+treeHeight = 10;
+outputHeight = 0;
+} else {
+treeHeight = 0;
+outputHeight = height-4;
+}
+	ui.SetBounds(uiViewOutput, 0, 1, width, outputHeight);
+//0, 1, width-20, height-2)
+	ui.SetBounds(uiViewTree, 0, 1, width, treeHeight);
+//width-20, 1, width, height-2)
 //	ui.SetBounds(uiViewLogo, 0, 0, 9, 1)
 //	ui.SetBounds(uiViewTop, 9, 0, width-6, 1)
-	ui.SetBounds(uiViewStatus, 0,hight-2, width, hight-1);
+	ui.SetBounds(uiViewStatus, 0,height-2, width, height-1);
 //width-6, 0, width, 1)
 	ui.SetBounds(uiViewInput, 12, height-1, width, height);
 //0, height-1, width, height)
 	ui.SetBounds(uiViewInputStatus, 0, height-1, 11, height);
 //0, height-2, width, height-1)
-	ui.SetBounds(uiViewOutput, 0, height-22, width, height-2);
-//0, 1, width-20, height-2)
-	ui.SetBounds(uiViewTree, 0, 1, width, 10);
-//width-20, 1, width, height-2)
 }
