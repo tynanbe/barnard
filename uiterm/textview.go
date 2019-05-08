@@ -62,7 +62,7 @@ func (t *Textview) ScrollBottom() {
 }
 
 func (t *Textview) updateParsedLines() {
-	width := t.x1 - t.x0 - 3
+	width := t.x1 - t.x0
 
 	if t.Lines == nil || width <= 0 {
 		t.parsedLines = nil
