@@ -85,6 +85,12 @@ func (t *Textbox) uiDraw() {
 func (t *Textbox) uiKeyEvent(mod Modifier, key Key) {
 	redraw := false
 	switch key {
+	case KeyHome:
+		t.pos = 0
+		redraw = true
+	case KeyEnd:
+		t.pos = len(t.Text)
+		redraw = true
 	case KeyArrowLeft:
 		t.pos -= 1
 		redraw = true
