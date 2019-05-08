@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/nsf/termbox-go"
-"os/exec"
 	"fmt"
+	"github.com/nsf/termbox-go"
+	"os/exec"
 	"strings"
 	"time"
 
-	"github.com/kennygrant/sanitize"
 	"github.com/bmmcginty/barnard/uiterm"
+	"github.com/kennygrant/sanitize"
 	"layeh.com/gumble/gumble"
 )
 
@@ -22,14 +22,14 @@ const (
 	uiViewTree        = "tree"
 )
 
-func beep () {
-cmd := exec.Command("beep");
-cmdout, err := cmd.Output();
-if (err!=nil) {
-panic(err);
-}
-if(cmdout!=nil) {
-}
+func beep() {
+	cmd := exec.Command("beep")
+	cmdout, err := cmd.Output()
+	if err != nil {
+		panic(err)
+	}
+	if cmdout != nil {
+	}
 }
 
 func esc(str string) string {
@@ -53,6 +53,10 @@ func (b *Barnard) AddOutputMessage(sender *gumble.User, message string) {
 	} else {
 		b.AddOutputLine(fmt.Sprintf("%s: %s", sender.Name, strings.TrimSpace(esc(message))))
 	}
+}
+
+func (b *Barnard) OnTimestampToggle(ui *uiterm.Ui, key uiterm.Key) {
+	b.UiOutput.ToggleTimestamps()
 }
 
 func (b *Barnard) OnVoiceToggle(ui *uiterm.Ui, key uiterm.Key) {
@@ -102,9 +106,9 @@ func (b *Barnard) OnFocusPress(ui *uiterm.Ui, key uiterm.Key) {
 	} else if active == uiViewTree {
 		b.Ui.SetActive(uiViewInput)
 	}
-	width, height := termbox.Size();
-b.OnUiResize(ui, width, height);
-ui.Refresh();
+	width, height := termbox.Size()
+	b.OnUiResize(ui, width, height)
+	ui.Refresh()
 }
 
 func (b *Barnard) OnTextInput(ui *uiterm.Ui, textbox *uiterm.Textbox, text string) {
@@ -165,6 +169,7 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 
 	b.Ui.AddKeyListener(b.OnFocusPress, uiterm.KeyTab)
 	b.Ui.AddKeyListener(b.OnVoiceToggle, uiterm.KeyF1)
+	b.Ui.AddKeyListener(b.OnTimestampToggle, uiterm.KeyF3)
 	b.Ui.AddKeyListener(b.OnQuitPress, uiterm.KeyF10)
 	b.Ui.AddKeyListener(b.OnClearPress, uiterm.KeyCtrlL)
 	b.Ui.AddKeyListener(b.OnScrollOutputUp, uiterm.KeyPgup)
@@ -176,26 +181,26 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 }
 
 func (b *Barnard) OnUiResize(ui *uiterm.Ui, width, height int) {
-treeHeight := 0;
-outputHeight := 0;
+	treeHeight := 0
+	outputHeight := 0
 	active := b.Ui.Active()
-if (active == uiViewTree ) {
-treeHeight = 10;
-outputHeight = 0;
-} else {
-treeHeight = 0;
-outputHeight = height-4;
-}
-	ui.SetBounds(uiViewOutput, 0, 1, width, outputHeight);
-//0, 1, width-20, height-2)
-	ui.SetBounds(uiViewTree, 0, 1, width, treeHeight);
-//width-20, 1, width, height-2)
-//	ui.SetBounds(uiViewLogo, 0, 0, 9, 1)
-//	ui.SetBounds(uiViewTop, 9, 0, width-6, 1)
-	ui.SetBounds(uiViewStatus, 0,height-2, width, height-1);
-//width-6, 0, width, 1)
-	ui.SetBounds(uiViewInput, 12, height-1, width, height);
-//0, height-1, width, height)
-	ui.SetBounds(uiViewInputStatus, 0, height-1, 11, height);
-//0, height-2, width, height-1)
+	if active == uiViewTree {
+		treeHeight = 10
+		outputHeight = 0
+	} else {
+		treeHeight = 0
+		outputHeight = height - 4
+	}
+	ui.SetBounds(uiViewOutput, 0, 1, width, outputHeight)
+	//0, 1, width-20, height-2)
+	ui.SetBounds(uiViewTree, 0, 1, width, treeHeight)
+	//width-20, 1, width, height-2)
+	//	ui.SetBounds(uiViewLogo, 0, 0, 9, 1)
+	//	ui.SetBounds(uiViewTop, 9, 0, width-6, 1)
+	ui.SetBounds(uiViewStatus, 0, height-2, width, height-1)
+	//width-6, 0, width, 1)
+	ui.SetBounds(uiViewInput, 12, height-1, width, height)
+	//0, height-1, width, height)
+	ui.SetBounds(uiViewInputStatus, 0, height-1, 11, height)
+	//0, height-2, width, height-1)
 }

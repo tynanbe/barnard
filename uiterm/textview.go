@@ -7,11 +7,11 @@ import (
 )
 
 type Textview struct {
-	Lines       []string
-	CurrentLine int
-	Fg, Bg      Attribute
-
-	parsedLines []string
+	Lines          []string
+	CurrentLine    int
+	Fg, Bg         Attribute
+	showTimestamps bool
+	parsedLines    []string
 
 	ui             *Ui
 	x0, y0, x1, y1 int
@@ -19,6 +19,17 @@ type Textview struct {
 
 func (t *Textview) uiInitialize(ui *Ui) {
 	t.ui = ui
+	t.showTimestamps = true
+}
+
+func (t *Textview) ToggleTimestamps() {
+	if t.showTimestamps == true {
+		t.showTimestamps = false
+	} else {
+		t.showTimestamps = true
+	}
+	t.updateParsedLines()
+	t.uiDraw()
 }
 
 func (t *Textview) uiSetActive(active bool) {
@@ -71,9 +82,13 @@ func (t *Textview) updateParsedLines() {
 
 	parsed := make([]string, 0, len(t.Lines))
 	for _, line := range t.Lines {
+		var l = line
+		if t.showTimestamps == false {
+			l = strings.TrimSpace(strings.Split(line, "]")[1])
+		}
 		current := ""
 		chars := 0
-		reader := strings.NewReader(line)
+		reader := strings.NewReader(l)
 		for {
 			if chars >= width {
 				parsed = append(parsed, current)
@@ -113,28 +128,28 @@ func (t *Textview) uiDraw() {
 	defer t.ui.endDraw()
 
 	var reader *strings.Reader
-writeableLines := t.y1-t.y0;
-lineNum := 0;
-if (writeableLines < len(t.parsedLines) ) {
-lineNum = len(t.parsedLines)-writeableLines;
-}
-//Beep()
-for y:=0; y<writeableLines; y++ {
-if (lineNum<len(t.parsedLines)) {
+	writeableLines := t.y1 - t.y0
+	lineNum := 0
+	if writeableLines < len(t.parsedLines) {
+		lineNum = len(t.parsedLines) - writeableLines
+	}
+	//Beep()
+	for y := 0; y < writeableLines; y++ {
+		if lineNum < len(t.parsedLines) {
 			reader = strings.NewReader(t.parsedLines[lineNum])
 		} else {
 			reader = nil
 		}
 		for x := t.x0; x < t.x1; x++ {
 			var chr rune = ' '
-				if reader != nil {
-					if ch, _, err := reader.ReadRune(); err == nil {
-						chr = ch
-					} //no err
-				} //reader != nil
+			if reader != nil {
+				if ch, _, err := reader.ReadRune(); err == nil {
+					chr = ch
+				} //no err
+			} //reader != nil
 			termbox.SetCell(x, y, chr, termbox.Attribute(t.Fg), termbox.Attribute(t.Bg))
 		} //each x
-lineNum++
+		lineNum++
 	} //each y
 } //func
 

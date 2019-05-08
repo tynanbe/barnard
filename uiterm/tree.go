@@ -126,9 +126,9 @@ func (t *Tree) uiDraw() {
 			}
 			termbox.SetCell(x, y, chr, termbox.Attribute(fg), termbox.Attribute(bg))
 		}
-if(t.activeLine == (y - t.y0)) {
-termbox.SetCursor(t.x0,y)
-}
+		if t.activeLine == (y - t.y0) {
+			termbox.SetCursor(t.x0, y)
+		}
 		line++
 	}
 }

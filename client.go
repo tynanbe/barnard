@@ -67,6 +67,16 @@ func (b *Barnard) OnTextMessage(e *gumble.TextMessageEvent) {
 }
 
 func (b *Barnard) OnUserChange(e *gumble.UserChangeEvent) {
+	var s = "unknown"
+	if e.Type.Has(gumble.UserChangeConnected) {
+		s = "joined"
+	}
+	if e.Type.Has(gumble.UserChangeDisconnected) {
+		s = "left"
+	}
+	if e.User.Channel.Name == b.Client.Self.Channel.Name {
+		b.AddOutputLine(fmt.Sprintf("%s %s %s", e.User.Name, s, e.User.Channel.Name))
+	}
 	if e.Type.Has(gumble.UserChangeChannel) && e.User == b.Client.Self {
 		b.UpdateInputStatus(fmt.Sprintf("[%s]", e.User.Channel.Name))
 	}
