@@ -40,6 +40,7 @@ func (b *Barnard) TreeItemKeyPress(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm
 if(key==uiterm.KeyEnter) {
 	if treeItem.Channel != nil {
 		b.Client.Self.Move(treeItem.Channel)
+b.SetSelectedUser(nil)
 	}
 	if treeItem.User != nil {
 if b.selectedUser==treeItem.User {
