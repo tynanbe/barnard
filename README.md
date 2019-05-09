@@ -10,6 +10,7 @@ When in the message input box:
 * left and right arrow keys move by character
 * home/end moves to the beginning/end of the text respectively
 * enter submits the entered message
+
 When in the treeview, pressing:
 * f5 or f6 on a channel changes the volume for all users in that channel
 * f5 or f6 on a user changes the volume for that user.
