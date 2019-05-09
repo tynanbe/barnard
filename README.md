@@ -7,21 +7,24 @@ Our thanks go out to Tim Cooper for the massive amount of work put into this cli
 
 Pressing tab inside the main window switches between the user/channel tree view and the message input box.
 When in the message input box:
-*left and right arrow keys move by character
-*home/end moves to the beginning/end of the text respectively
-*enter submits the entered message
-When in the treeview:
-*Pressing f5 or f6 on a user changes the volume for that user.
-*pressing enter on a user selects that user for PM mode.
-*Pressing enter again on that user de-selects that user.
-*Pressing enter on a channel de-selects any selected users (if any) and moves you to the specified channel.
+* left and right arrow keys move by character
+* home/end moves to the beginning/end of the text respectively
+* enter submits the entered message
+When in the treeview, pressing:
+* f5 or f6 on a channel changes the volume for all users in that channel
+* f5 or f6 on a user changes the volume for that user.
+* enter on de-selected user selects that user for PM mode.
+* enter on selected user de-selects the user
+* enter on a channel de-selects any selected users (if any) and moves you to the specified channel.
 
 ## PM Mode
 
+This mode sets the text to the left of your message entry box to [@username], where username is the name of the person you are PMing.
 While a user is selected, both private messages and channel messages are displayed.
-However, any messages sent will be delivered only to the selected user.
+However, any messages you send will be delivered only to the selected user.
 Private messages between you and another party are shown as `pm/source/dest`, where source and dest are the sender and receiver of the message respectively.
 When you are finished sending private messages to a user, press tab to reactivate the tree view, and de-select the user as above.
+
 
 ## Info
 
