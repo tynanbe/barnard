@@ -4,8 +4,8 @@ import (
 	"crypto/tls"
 
 	"github.com/bmmcginty/barnard/uiterm"
-	"layeh.com/gumble/gumble"
-	"layeh.com/gumble/gumbleopenal"
+	"github.com/bmmcginty/gumble/gumble"
+	"github.com/bmmcginty/gumble/gumbleopenal"
 )
 
 type Barnard struct {
@@ -23,4 +23,6 @@ type Barnard struct {
 	UiStatus      uiterm.Label
 	UiTree        uiterm.Tree
 	UiInputStatus uiterm.Label
+SelectedChannel *gumble.Channel
+selectedUser *gumble.User
 }

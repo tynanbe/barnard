@@ -9,7 +9,7 @@ import (
 
 	"github.com/bmmcginty/barnard/uiterm"
 	"github.com/kennygrant/sanitize"
-	"layeh.com/gumble/gumble"
+	"github.com/bmmcginty/gumble/gumble"
 )
 
 const (
@@ -36,6 +36,17 @@ func esc(str string) string {
 	return sanitize.HTML(str)
 }
 
+func (b *Barnard) SetSelectedUser(user *gumble.User) {
+b.selectedUser=user
+if user==nil {
+if len(b.UiInput.Text)>0 {
+}
+	b.UpdateInputStatus(fmt.Sprintf("[%s]", b.Client.Self.Channel.Name))
+} else {
+	b.UpdateInputStatus(fmt.Sprintf("[@%s]", user.Name))
+}
+}
+
 func (b *Barnard) UpdateInputStatus(status string) {
 	b.UiInputStatus.Text = status
 	b.UiTree.Rebuild()
@@ -54,6 +65,10 @@ func (b *Barnard) AddOutputMessage(sender *gumble.User, message string) {
 		b.AddOutputLine(fmt.Sprintf("%s: %s", sender.Name, strings.TrimSpace(esc(message))))
 	}
 }
+
+func (b *Barnard) AddOutputPrivateMessage(source *gumble.User, dest *gumble.User, message string) {
+		b.AddOutputLine(fmt.Sprintf("pm/%s/%s: %s", source.Name, dest.Name, strings.TrimSpace(esc(message))))
+	}
 
 func (b *Barnard) OnTimestampToggle(ui *uiterm.Ui, key uiterm.Key) {
 	b.UiOutput.ToggleTimestamps()
@@ -116,8 +131,13 @@ func (b *Barnard) OnTextInput(ui *uiterm.Ui, textbox *uiterm.Textbox, text strin
 		return
 	}
 	if b.Client != nil && b.Client.Self != nil {
+if b.selectedUser!=nil {
+b.selectedUser.Send(text)
+b.AddOutputPrivateMessage(b.Client.Self,b.selectedUser,text)
+} else {
 		b.Client.Self.Channel.Send(text, false)
 		b.AddOutputMessage(b.Client.Self, text)
+}
 	}
 }
 
@@ -160,8 +180,9 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 	ui.Add(uiViewOutput, &b.UiOutput)
 
 	b.UiTree = uiterm.Tree{
-		Generator: b.TreeItem,
-		Listener:  b.TreeItemSelect,
+		Generator: b.TreeItemBuild,
+		KeyListener:  b.TreeItemKeyPress,
+		CharacterListener:  b.TreeItemCharacter,
 		Fg:        uiterm.ColorWhite,
 		Bg:        uiterm.ColorBlack,
 	}
@@ -201,6 +222,6 @@ func (b *Barnard) OnUiResize(ui *uiterm.Ui, width, height int) {
 	//width-6, 0, width, 1)
 	ui.SetBounds(uiViewInput, 12, height-1, width, height)
 	//0, height-1, width, height)
-	ui.SetBounds(uiViewInputStatus, 0, height-1, 11, height)
+	ui.SetBounds(uiViewInputStatus, 0, height-1, 20, height)
 	//0, height-2, width, height-1)
 }

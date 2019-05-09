@@ -5,9 +5,9 @@ import (
 	"net"
 	"os"
 
-	"layeh.com/gumble/gumble"
-	"layeh.com/gumble/gumbleopenal"
-	"layeh.com/gumble/gumbleutil"
+	"github.com/bmmcginty/gumble/gumble"
+	"github.com/bmmcginty/gumble/gumbleopenal"
+	"github.com/bmmcginty/gumble/gumbleutil"
 )
 
 func (b *Barnard) start() {
@@ -62,8 +62,23 @@ func (b *Barnard) OnDisconnect(e *gumble.DisconnectEvent) {
 	b.Ui.Refresh()
 }
 
+func (b *Barnard) Log(s string) {
+b.AddOutputMessage(nil, s)
+}
+
 func (b *Barnard) OnTextMessage(e *gumble.TextMessageEvent) {
+var public=false
+for _, c := range e.Channels {
+if c.Name==b.Client.Self.Channel.Name {
+public=true
+break
+}
+}
+if public {
 	b.AddOutputMessage(e.Sender, e.Message)
+} else {
+b.AddOutputPrivateMessage(e.Sender,b.Client.Self,e.Message)
+}
 }
 
 func (b *Barnard) OnUserChange(e *gumble.UserChangeEvent) {
@@ -73,6 +88,9 @@ func (b *Barnard) OnUserChange(e *gumble.UserChangeEvent) {
 	}
 	if e.Type.Has(gumble.UserChangeDisconnected) {
 		s = "left"
+if e.User==b.selectedUser {
+b.SetSelectedUser(nil)
+}
 	}
 	if e.User.Channel.Name == b.Client.Self.Channel.Name {
 		b.AddOutputLine(fmt.Sprintf("%s %s %s", e.User.Name, s, e.User.Channel.Name))

@@ -20,7 +20,8 @@ type renderedTreeItem struct {
 type Tree struct {
 	Fg, Bg    Attribute
 	Generator func(item TreeItem) []TreeItem
-	Listener  func(ui *Ui, tree *Tree, item TreeItem)
+	KeyListener  func(ui *Ui, tree *Tree, item TreeItem, mod Modifier, key Key)
+	CharacterListener  func(ui *Ui, tree *Tree, item TreeItem, chr rune)
 
 	lines      []renderedTreeItem
 	activeLine int
@@ -71,7 +72,7 @@ func (t *Tree) Rebuild() {
 		}
 	}
 	t.lines = lines
-	t.activeLine = bounded(t.activeLine, 0, len(t.lines)-1)
+	t.SetActiveLine(0,true)
 	t.uiDraw()
 }
 
@@ -93,6 +94,7 @@ func (t *Tree) rebuild_rec(parent TreeItem, level int) []renderedTreeItem {
 	}
 	return lines
 }
+
 
 func (t *Tree) uiDraw() {
 	t.ui.beginDraw()
@@ -133,19 +135,35 @@ func (t *Tree) uiDraw() {
 	}
 }
 
+func (t *Tree) SetActiveLine(num int, relative bool) {
+if relative {
+		t.activeLine = bounded(t.activeLine+num, 0, len(t.lines)-1)
+} else {
+		t.activeLine = bounded(num, 0, len(t.lines)-1)
+}
+}
+
 func (t *Tree) uiKeyEvent(mod Modifier, key Key) {
+var runHandler=true
 	switch key {
 	case KeyArrowUp:
-		t.activeLine = bounded(t.activeLine-1, 0, len(t.lines)-1)
+t.SetActiveLine(-1, true)
+runHandler=false
 	case KeyArrowDown:
-		t.activeLine = bounded(t.activeLine+1, 0, len(t.lines)-1)
-	case KeyEnter:
-		if t.Listener != nil && t.activeLine >= 0 && t.activeLine < len(t.lines) {
-			t.Listener(t.ui, t, t.lines[t.activeLine].Item)
+t.SetActiveLine(1, true)
+runHandler=false
+}
+if t.activeLine < 0 || t.activeLine >= len(t.lines)  {
+t.SetActiveLine(0,true)
+}
+if runHandler==true && t.KeyListener != nil {
+			t.KeyListener(t.ui, t, t.lines[t.activeLine].Item, mod, key)
 		}
-	}
 	t.uiDraw()
 }
 
 func (t *Tree) uiCharacterEvent(ch rune) {
+if (t.KeyListener!=nil) {
+t.CharacterListener(t.ui, t, t.lines[t.activeLine].Item, ch)
+}
 }
