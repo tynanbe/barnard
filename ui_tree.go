@@ -50,8 +50,36 @@ b.SetSelectedUser(treeItem.User)
 } //select
 	} //if user and not selected
 } //if enter key
-if b.selectedUser!=nil {
-var au = b.selectedUser.AudioSource
+if treeItem.Channel!=nil {
+var c = treeItem.Channel
+var change = float32(0.0)
+var changeType=""
+if key==uiterm.KeyF5 {
+changeType="volume"
+change=-0.1
+}
+if key==uiterm.KeyF6 {
+changeType="volume"
+change=0.1
+}
+if changeType=="volume" {
+for _, u := range c.Users {
+var au=u.AudioSource
+var gain=au.GetGain()
+gain+=change
+if gain < au.GetMinGain() {
+gain=au.GetMinGain()
+}
+if gain > au.GetMaxGain() {
+gain=au.GetMaxGain()
+}
+au.SetGain(gain)
+} //each user
+} //set volume
+} //enter on channel
+if treeItem.User!=nil {
+var u=treeItem.User
+var au = u.AudioSource
 var set_gain=false
 if key==uiterm.KeyF5 {
 set_gain=true
@@ -73,9 +101,9 @@ gain=maxgain
 au.SetGain(gain)
 } //f5
 if set_gain {
-b.Log(fmt.Sprintf("%s gain %.2f",b.selectedUser.Name,au.GetGain()))
+b.Log(fmt.Sprintf("%s gain %.2f",u.Name,au.GetGain()))
 } //if set gain
-} //selectedUser
+} //user highlighted
 } //func
 
 func (b *Barnard) TreeItemBuild(item uiterm.TreeItem) []uiterm.TreeItem {
