@@ -84,12 +84,12 @@ if treeItem.User!=nil {
 var u=treeItem.User
 var au = u.AudioSource
 var set_gain=false
-if key==uiterm.KeyF7 {
-au.SetPitch(au.GetPitch()-0.1)
-}
-if key==uiterm.KeyF8 {
-au.SetPitch(au.GetPitch()+0.1)
-}
+//if key==uiterm.KeyF7 {
+//au.SetPitch(au.GetPitch()-0.1)
+//}
+//if key==uiterm.KeyF8 {
+//au.SetPitch(au.GetPitch()+0.1)
+//}
 if key==uiterm.KeyF5 {
 set_gain=true
 var mingain = au.GetMinGain()
@@ -110,7 +110,7 @@ gain=maxgain
 au.SetGain(gain)
 } //f5
 if set_gain {
-b.Log(fmt.Sprintf("%s gain %.2f",u.Name,au.GetGain()))
+//b.Log(fmt.Sprintf("%s gain %.2f",u.Name,au.GetGain()))
 } //if set gain
 } //user highlighted
 } //func
