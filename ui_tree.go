@@ -41,12 +41,15 @@ if(key==uiterm.KeyEnter) {
 	if treeItem.Channel != nil {
 		b.Client.Self.Move(treeItem.Channel)
 b.SetSelectedUser(nil)
+b.GotoChat()
 	}
 	if treeItem.User != nil {
 if b.selectedUser==treeItem.User {
 b.SetSelectedUser(nil)
+b.GotoChat()
 } else {
 b.SetSelectedUser(treeItem.User)
+b.GotoChat()
 } //select
 	} //if user and not selected
 } //if enter key
@@ -81,6 +84,12 @@ if treeItem.User!=nil {
 var u=treeItem.User
 var au = u.AudioSource
 var set_gain=false
+if key==uiterm.KeyF7 {
+au.SetPitch(au.GetPitch()-0.1)
+}
+if key==uiterm.KeyF8 {
+au.SetPitch(au.GetPitch()+0.1)
+}
 if key==uiterm.KeyF5 {
 set_gain=true
 var mingain = au.GetMinGain()

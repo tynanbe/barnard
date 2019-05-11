@@ -10,6 +10,7 @@ import (
 
 type Barnard struct {
 	Config *gumble.Config
+UserConfig *userConfig
 	Client *gumble.Client
 
 	Address   string

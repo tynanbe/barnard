@@ -13,9 +13,10 @@ import (
 func (b *Barnard) start() {
 	b.Config.Attach(gumbleutil.AutoBitrate)
 	b.Config.Attach(b)
+b.Config.Address=b.Address
 
 	var err error
-	_, err = gumble.DialWithDialer(new(net.Dialer), b.Address, b.Config, &b.TLSConfig)
+	_, err = gumble.DialWithDialer(new(net.Dialer), b.Config, &b.TLSConfig)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		os.Exit(1)

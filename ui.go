@@ -75,7 +75,7 @@ func (b *Barnard) OnTimestampToggle(ui *uiterm.Ui, key uiterm.Key) {
 }
 
 func (b *Barnard) OnVoiceToggle(ui *uiterm.Ui, key uiterm.Key) {
-	if b.UiStatus.Text == "  Tx  " {
+	if b.UiStatus.Text != " Idle " {
 		b.UiStatus.Text = " Idle "
 		b.UiStatus.Fg = uiterm.ColorBlack
 		b.UiStatus.Bg = uiterm.ColorWhite
@@ -84,7 +84,10 @@ func (b *Barnard) OnVoiceToggle(ui *uiterm.Ui, key uiterm.Key) {
 		b.UiStatus.Fg = uiterm.ColorWhite | uiterm.AttrBold
 		b.UiStatus.Bg = uiterm.ColorRed
 		b.UiStatus.Text = "  Tx  "
-		b.Stream.StartSource()
+		err := b.Stream.StartSource()
+if err!=nil {
+b.UiStatus.Text=err.Error()
+}
 	}
 	ui.Refresh()
 }
@@ -139,6 +142,10 @@ b.AddOutputPrivateMessage(b.Client.Self,b.selectedUser,text)
 		b.AddOutputMessage(b.Client.Self, text)
 }
 	}
+}
+
+func (b *Barnard) GotoChat() {
+b.OnFocusPress(b.Ui,uiterm.KeyTab)
 }
 
 func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
