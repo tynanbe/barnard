@@ -45,7 +45,7 @@ Requirements:
 
 To fetch and build:
 
-    go get -u layeh.com/barnard
+    go get -u github.com/bmmcginty/barnard
 
 After running the command above, `barnard` will be compiled as `$(go env GOPATH)/bin/barnard`.
 
@@ -66,6 +66,7 @@ After running the command above, `barnard` will be compiled as `$(go env GOPATH)
 
 GPLv2
 
-## Author
+## Contributors
 
 Tim Cooper (<tim.cooper@layeh.com>)
+Brandon McGinty-Carroll (<bmmcginty.barnard@bmcginty.us>)
