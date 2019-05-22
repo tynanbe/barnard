@@ -1,7 +1,7 @@
 package main
 
 import (
-"fmt"
+//"fmt"
 "sort"
 	"github.com/bmmcginty/barnard/uiterm"
 	"github.com/bmmcginty/gumble/gumble"
