@@ -213,15 +213,15 @@ func (b *Barnard) OnUiResize(ui *uiterm.Ui, width, height int) {
 	outputHeight := 0
 	active := b.Ui.Active()
 	if active == uiViewTree {
-		treeHeight = 10
+		treeHeight = height-4
 		outputHeight = 0
 	} else {
 		treeHeight = 0
 		outputHeight = height - 4
 	}
-	ui.SetBounds(uiViewOutput, 0, 1, width, outputHeight)
+	ui.SetBounds(uiViewOutput, 0, 1, width, outputHeight+1)
 	//0, 1, width-20, height-2)
-	ui.SetBounds(uiViewTree, 0, 1, width, treeHeight)
+	ui.SetBounds(uiViewTree, 0, 1, width, treeHeight+1)
 	//width-20, 1, width, height-2)
 	//	ui.SetBounds(uiViewLogo, 0, 0, 9, 1)
 	//	ui.SetBounds(uiViewTop, 9, 0, width-6, 1)

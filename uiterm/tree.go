@@ -104,7 +104,27 @@ func (t *Tree) uiDraw() {
 		t.Rebuild()
 	}
 
-	line := 0
+if t.y1-t.y0 <= 0 {
+return
+}
+
+var	line = t.activeLine
+var height=t.y1-t.y0
+var startline=0
+var total = len(t.lines)
+//I'd welcome a better algorithm for this; for that matter, I'd love a book or reference for all sorts of GUI algorithms.
+//if (startline+height) < line {
+for startline=0; (startline+height) <= line; startline+=height {
+}
+//}
+if startline+height >= total {
+var rem=(startline+height)-total
+startline-=rem
+}
+if (startline < 0) {
+startline = 0
+}
+line=startline
 	for y := t.y0; y < t.y1; y++ {
 		var reader *strings.Reader
 		var item TreeItem
@@ -128,7 +148,7 @@ func (t *Tree) uiDraw() {
 			}
 			termbox.SetCell(x, y, chr, termbox.Attribute(fg), termbox.Attribute(bg))
 		}
-		if t.activeLine == (y - t.y0) {
+		if t.activeLine == (line) {
 			termbox.SetCursor(t.x0, y)
 		}
 		line++
@@ -152,9 +172,6 @@ runHandler=false
 	case KeyArrowDown:
 t.SetActiveLine(1, true)
 runHandler=false
-}
-if t.activeLine < 0 || t.activeLine >= len(t.lines)  {
-t.SetActiveLine(0,true)
 }
 if runHandler==true && t.KeyListener != nil {
 			t.KeyListener(t.ui, t, t.lines[t.activeLine].Item, mod, key)
