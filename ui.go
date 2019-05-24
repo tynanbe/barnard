@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/bmmcginty/barnard/uiterm"
-	"github.com/kennygrant/sanitize"
 	"github.com/bmmcginty/gumble/gumble"
+	"github.com/kennygrant/sanitize"
 )
 
 const (
@@ -37,17 +37,24 @@ func esc(str string) string {
 }
 
 func (b *Barnard) SetSelectedUser(user *gumble.User) {
-b.selectedUser=user
-if user==nil {
-if len(b.UiInput.Text)>0 {
+	b.selectedUser = user
+	if user == nil {
+		if len(b.UiInput.Text) > 0 {
+		}
+		b.UpdateInputStatus(fmt.Sprintf("[%s]", b.Client.Self.Channel.Name))
+	} else {
+		b.UpdateInputStatus(fmt.Sprintf("[@%s]", user.Name))
+	}
 }
-	b.UpdateInputStatus(fmt.Sprintf("[%s]", b.Client.Self.Channel.Name))
-} else {
-	b.UpdateInputStatus(fmt.Sprintf("[@%s]", user.Name))
-}
+
+func (b *Barnard) GetInputStatus() string {
+	return b.UiInputStatus.Text
 }
 
 func (b *Barnard) UpdateInputStatus(status string) {
+	if len(status) > 20 {
+		status = status[:17] + "..." + "]"
+	}
 	b.UiInputStatus.Text = status
 	b.UiTree.Rebuild()
 	b.Ui.Refresh()
@@ -67,8 +74,8 @@ func (b *Barnard) AddOutputMessage(sender *gumble.User, message string) {
 }
 
 func (b *Barnard) AddOutputPrivateMessage(source *gumble.User, dest *gumble.User, message string) {
-		b.AddOutputLine(fmt.Sprintf("pm/%s/%s: %s", source.Name, dest.Name, strings.TrimSpace(esc(message))))
-	}
+	b.AddOutputLine(fmt.Sprintf("pm/%s/%s: %s", source.Name, dest.Name, strings.TrimSpace(esc(message))))
+}
 
 func (b *Barnard) OnTimestampToggle(ui *uiterm.Ui, key uiterm.Key) {
 	b.UiOutput.ToggleTimestamps()
@@ -85,9 +92,9 @@ func (b *Barnard) OnVoiceToggle(ui *uiterm.Ui, key uiterm.Key) {
 		b.UiStatus.Bg = uiterm.ColorRed
 		b.UiStatus.Text = "  Tx  "
 		err := b.Stream.StartSource()
-if err!=nil {
-b.UiStatus.Text=err.Error()
-}
+		if err != nil {
+			b.UiStatus.Text = err.Error()
+		}
 	}
 	ui.Refresh()
 }
@@ -134,31 +141,31 @@ func (b *Barnard) OnTextInput(ui *uiterm.Ui, textbox *uiterm.Textbox, text strin
 		return
 	}
 	if b.Client != nil && b.Client.Self != nil {
-if b.selectedUser!=nil {
-b.selectedUser.Send(text)
-b.AddOutputPrivateMessage(b.Client.Self,b.selectedUser,text)
-} else {
-		b.Client.Self.Channel.Send(text, false)
-		b.AddOutputMessage(b.Client.Self, text)
-}
+		if b.selectedUser != nil {
+			b.selectedUser.Send(text)
+			b.AddOutputPrivateMessage(b.Client.Self, b.selectedUser, text)
+		} else {
+			b.Client.Self.Channel.Send(text, false)
+			b.AddOutputMessage(b.Client.Self, text)
+		}
 	}
 }
 
 func (b *Barnard) GotoChat() {
-b.OnFocusPress(b.Ui,uiterm.KeyTab)
+	b.OnFocusPress(b.Ui, uiterm.KeyTab)
 }
 
 func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 	ui.Add(uiViewLogo, &uiterm.Label{
-		Text: " barnard ",
+		Text: "Barnard ",
 		Fg:   uiterm.ColorWhite | uiterm.AttrBold,
 		Bg:   uiterm.ColorMagenta,
 	})
 
-	ui.Add(uiViewTop, &uiterm.Label{
-		Fg: uiterm.ColorWhite,
-		Bg: uiterm.ColorBlue,
-	})
+	//	ui.Add(uiViewTop, &uiterm.Label{
+	//		Fg: uiterm.ColorWhite,
+	//		Bg: uiterm.ColorBlue,
+	//	})
 
 	b.UiStatus = uiterm.Label{
 		Text: " Idle ",
@@ -187,11 +194,11 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 	ui.Add(uiViewOutput, &b.UiOutput)
 
 	b.UiTree = uiterm.Tree{
-		Generator: b.TreeItemBuild,
-		KeyListener:  b.TreeItemKeyPress,
-		CharacterListener:  b.TreeItemCharacter,
-		Fg:        uiterm.ColorWhite,
-		Bg:        uiterm.ColorBlack,
+		Generator:         b.TreeItemBuild,
+		KeyListener:       b.TreeItemKeyPress,
+		CharacterListener: b.TreeItemCharacter,
+		Fg:                uiterm.ColorWhite,
+		Bg:                uiterm.ColorBlack,
 	}
 	ui.Add(uiViewTree, &b.UiTree)
 
@@ -213,22 +220,18 @@ func (b *Barnard) OnUiResize(ui *uiterm.Ui, width, height int) {
 	outputHeight := 0
 	active := b.Ui.Active()
 	if active == uiViewTree {
-		treeHeight = height-4
+		treeHeight = height - 4
 		outputHeight = 0
 	} else {
 		treeHeight = 0
 		outputHeight = height - 4
 	}
+	//		ui.SetBounds(uiViewLogo, 0, 0, 9, 1)
 	ui.SetBounds(uiViewOutput, 0, 1, width, outputHeight+1)
-	//0, 1, width-20, height-2)
 	ui.SetBounds(uiViewTree, 0, 1, width, treeHeight+1)
-	//width-20, 1, width, height-2)
-	//	ui.SetBounds(uiViewLogo, 0, 0, 9, 1)
-	//	ui.SetBounds(uiViewTop, 9, 0, width-6, 1)
 	ui.SetBounds(uiViewStatus, 0, height-2, width, height-1)
-	//width-6, 0, width, 1)
-	ui.SetBounds(uiViewInput, 12, height-1, width, height)
-	//0, height-1, width, height)
-	ui.SetBounds(uiViewInputStatus, 0, height-1, 20, height)
-	//0, height-2, width, height-1)
+	ui.SetBounds(uiViewInputStatus, 0, height-1, len(b.GetInputStatus()), height)
+	//setting this to inputStatus+1 will leave one space between inputStatus and input box
+	//x starts at 0, so 10 chars of text will go from 0 to 9, there'll be a space at char 10, and we'll start at (10+1)=11
+	ui.SetBounds(uiViewInput, len(b.GetInputStatus())+1, height-1, width, height)
 }

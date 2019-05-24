@@ -22,11 +22,11 @@ func main() {
 	flag.Parse()
 
 	// Initialize
-uc := &userConfig {}
+	uc := &userConfig{}
 	b := Barnard{
-		Config:  gumble.NewConfig(),
-UserConfig: uc,
-		Address: *server,
+		Config:     gumble.NewConfig(),
+		UserConfig: uc,
+		Address:    *server,
 	}
 
 	b.Config.Username = *username

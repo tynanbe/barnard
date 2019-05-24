@@ -9,21 +9,21 @@ import (
 )
 
 type Barnard struct {
-	Config *gumble.Config
-UserConfig *userConfig
-	Client *gumble.Client
+	Config     *gumble.Config
+	UserConfig *userConfig
+	Client     *gumble.Client
 
 	Address   string
 	TLSConfig tls.Config
 
 	Stream *gumbleopenal.Stream
 
-	Ui            *uiterm.Ui
-	UiOutput      uiterm.Textview
-	UiInput       uiterm.Textbox
-	UiStatus      uiterm.Label
-	UiTree        uiterm.Tree
-	UiInputStatus uiterm.Label
-SelectedChannel *gumble.Channel
-selectedUser *gumble.User
+	Ui              *uiterm.Ui
+	UiOutput        uiterm.Textview
+	UiInput         uiterm.Textbox
+	UiStatus        uiterm.Label
+	UiTree          uiterm.Tree
+	UiInputStatus   uiterm.Label
+	SelectedChannel *gumble.Channel
+	selectedUser    *gumble.User
 }

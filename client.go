@@ -13,7 +13,7 @@ import (
 func (b *Barnard) start() {
 	b.Config.Attach(gumbleutil.AutoBitrate)
 	b.Config.Attach(b)
-b.Config.Address=b.Address
+	b.Config.Address = b.Address
 
 	var err error
 	_, err = gumble.DialWithDialer(new(net.Dialer), b.Config, &b.TLSConfig)
@@ -64,22 +64,22 @@ func (b *Barnard) OnDisconnect(e *gumble.DisconnectEvent) {
 }
 
 func (b *Barnard) Log(s string) {
-b.AddOutputMessage(nil, s)
+	b.AddOutputMessage(nil, s)
 }
 
 func (b *Barnard) OnTextMessage(e *gumble.TextMessageEvent) {
-var public=false
-for _, c := range e.Channels {
-if c.Name==b.Client.Self.Channel.Name {
-public=true
-break
-}
-}
-if public {
-	b.AddOutputMessage(e.Sender, e.Message)
-} else {
-b.AddOutputPrivateMessage(e.Sender,b.Client.Self,e.Message)
-}
+	var public = false
+	for _, c := range e.Channels {
+		if c.Name == b.Client.Self.Channel.Name {
+			public = true
+			break
+		}
+	}
+	if public {
+		b.AddOutputMessage(e.Sender, e.Message)
+	} else {
+		b.AddOutputPrivateMessage(e.Sender, b.Client.Self, e.Message)
+	}
 }
 
 func (b *Barnard) OnUserChange(e *gumble.UserChangeEvent) {
@@ -89,9 +89,9 @@ func (b *Barnard) OnUserChange(e *gumble.UserChangeEvent) {
 	}
 	if e.Type.Has(gumble.UserChangeDisconnected) {
 		s = "left"
-if e.User==b.selectedUser {
-b.SetSelectedUser(nil)
-}
+		if e.User == b.selectedUser {
+			b.SetSelectedUser(nil)
+		}
 	}
 	if e.User.Channel.Name == b.Client.Self.Channel.Name {
 		b.AddOutputLine(fmt.Sprintf("%s %s %s", e.User.Name, s, e.User.Channel.Name))

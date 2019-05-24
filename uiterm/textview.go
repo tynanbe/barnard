@@ -134,7 +134,7 @@ func (t *Textview) uiDraw() {
 		lineNum = len(t.parsedLines) - writeableLines
 	}
 	//Beep()
-	for y := 0; y < writeableLines; y++ {
+	for y := t.y0; y < writeableLines; y++ {
 		if lineNum < len(t.parsedLines) {
 			reader = strings.NewReader(t.parsedLines[lineNum])
 		} else {

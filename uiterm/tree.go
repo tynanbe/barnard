@@ -111,16 +111,16 @@ return
 var	line = t.activeLine
 var height=t.y1-t.y0
 var startline=0
-var total = len(t.lines)
+//var total = len(t.lines)
 //I'd welcome a better algorithm for this; for that matter, I'd love a book or reference for all sorts of GUI algorithms.
 //if (startline+height) < line {
 for startline=0; (startline+height) <= line; startline+=height {
 }
 //}
-if startline+height >= total {
-var rem=(startline+height)-total
-startline-=rem
-}
+//if startline+height >= total {
+//var rem=(startline+height)-total
+//startline-=rem
+//}
 if (startline < 0) {
 startline = 0
 }
