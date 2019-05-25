@@ -168,6 +168,8 @@ func (ui *Ui) SetBounds(name string, x0, y0, x1, y1 int) error {
 	return nil
 }
 
-func (ui *Ui) AddKeyListener(listener KeyListener, key Key) {
-	ui.keyListeners[key] = append(ui.keyListeners[key], listener)
+func (ui *Ui) AddKeyListener(listener KeyListener, key *Key) {
+if key!=nil {
+	ui.keyListeners[*key] = append(ui.keyListeners[*key], listener)
+}
 }

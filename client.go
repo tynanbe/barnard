@@ -37,6 +37,10 @@ func (b *Barnard) start() {
 func (b *Barnard) OnConnect(e *gumble.ConnectEvent) {
 	b.Client = e.Client
 
+for _,u := range b.Client.Users {
+b.UserConfig.UpdateUser(u)
+}
+
 	b.Ui.SetActive(uiViewInput)
 	b.UiTree.Rebuild()
 	b.Ui.Refresh()
@@ -83,6 +87,9 @@ func (b *Barnard) OnTextMessage(e *gumble.TextMessageEvent) {
 }
 
 func (b *Barnard) OnUserChange(e *gumble.UserChangeEvent) {
+if e.User != nil {
+b.UserConfig.UpdateUser(e.User)
+}
 	var s = "unknown"
 	if e.Type.Has(gumble.UserChangeConnected) {
 		s = "joined"

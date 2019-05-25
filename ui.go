@@ -36,6 +36,10 @@ func esc(str string) string {
 	return sanitize.HTML(str)
 }
 
+func(b *Barnard) Beep() {
+beep()
+}
+
 func (b *Barnard) SetSelectedUser(user *gumble.User) {
 	b.selectedUser = user
 	if user == nil {
@@ -202,15 +206,14 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 	}
 	ui.Add(uiViewTree, &b.UiTree)
 
-	b.Ui.AddKeyListener(b.OnFocusPress, uiterm.KeyTab)
-	b.Ui.AddKeyListener(b.OnVoiceToggle, uiterm.KeyF1)
-	b.Ui.AddKeyListener(b.OnTimestampToggle, uiterm.KeyF3)
-	b.Ui.AddKeyListener(b.OnQuitPress, uiterm.KeyF10)
-	b.Ui.AddKeyListener(b.OnClearPress, uiterm.KeyCtrlL)
-	b.Ui.AddKeyListener(b.OnScrollOutputUp, uiterm.KeyPgup)
-	b.Ui.AddKeyListener(b.OnScrollOutputDown, uiterm.KeyPgdn)
-	b.Ui.AddKeyListener(b.OnScrollOutputTop, uiterm.KeyHome)
-	b.Ui.AddKeyListener(b.OnScrollOutputBottom, uiterm.KeyEnd)
+	b.Ui.AddKeyListener(b.OnFocusPress, b.Hotkeys.SwitchViews)
+	b.Ui.AddKeyListener(b.OnVoiceToggle, b.Hotkeys.Talk)
+	b.Ui.AddKeyListener(b.OnTimestampToggle, b.Hotkeys.ToggleTimestamps)
+	b.Ui.AddKeyListener(b.OnQuitPress, b.Hotkeys.Exit)
+	b.Ui.AddKeyListener(b.OnScrollOutputUp, b.Hotkeys.ScrollUp)
+	b.Ui.AddKeyListener(b.OnScrollOutputDown, b.Hotkeys.ScrollDown)
+	b.Ui.AddKeyListener(b.OnScrollOutputTop, b.Hotkeys.ScrollToTop)
+	b.Ui.AddKeyListener(b.OnScrollOutputBottom, b.Hotkeys.ScrollToBottom)
 
 	b.start()
 }

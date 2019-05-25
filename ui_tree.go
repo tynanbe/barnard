@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"fmt"
+//	"fmt"
 	"github.com/bmmcginty/barnard/uiterm"
 	"github.com/bmmcginty/gumble/gumble"
 	"sort"
@@ -68,6 +68,9 @@ func (b *Barnard) TreeItemKeyPress(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm
 		if changeType == "volume" {
 			for _, u := range c.Users {
 				var au = u.AudioSource
+if au==nil {
+continue
+}
 				var gain = au.GetGain()
 				gain += change
 				if gain < au.GetMinGain() {
@@ -77,13 +80,17 @@ func (b *Barnard) TreeItemKeyPress(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm
 					gain = au.GetMaxGain()
 				}
 				au.SetGain(gain)
+b.UserConfig.UpdateConfig(u)
+b.UserConfig.SaveConfig()
 			} //each user
 		} //set volume
 	} //enter on channel
 	if treeItem.User != nil {
 		var u = treeItem.User
 		var au = u.AudioSource
+if au!=nil {
 		var set_gain = false
+var gain float32
 		//if key==uiterm.KeyF7 {
 		//au.SetPitch(au.GetPitch()-0.1)
 		//}
@@ -93,25 +100,28 @@ func (b *Barnard) TreeItemKeyPress(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm
 		if key == uiterm.KeyF5 {
 			set_gain = true
 			var mingain = au.GetMinGain()
-			var gain = au.GetGain()
+			gain = au.GetGain()
 			gain -= 0.1
 			if gain < mingain {
 				gain = mingain
 			}
-			au.SetGain(gain)
 		} //f5
 		if key == uiterm.KeyF6 {
+set_gain=true
 			var maxgain = au.GetMaxGain()
-			var gain = au.GetGain()
+			gain = au.GetGain()
 			gain += 0.1
 			if gain > maxgain {
 				gain = maxgain
 			}
-			au.SetGain(gain)
 		} //f5
 		if set_gain {
+			au.SetGain(gain)
+b.UserConfig.UpdateConfig(u)
+b.UserConfig.SaveConfig()
 			//b.Log(fmt.Sprintf("%s gain %.2f",u.Name,au.GetGain()))
 		} //if set gain
+} //user has audioSource
 	} //user highlighted
 } //func
 

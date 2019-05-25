@@ -1,4 +1,5 @@
 package uiterm
+//go:generate enumer -type=Key -trimprefix=Key -yaml -json -transform=snake
 
 /*
  * Source: https://godoc.org/github.com/nsf/termbox-go

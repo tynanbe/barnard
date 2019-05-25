@@ -1,6 +1,8 @@
 package main
 
 import (
+"strings"
+"github.com/bmmcginty/barnard/config"
 	"crypto/tls"
 	"flag"
 	"fmt"
@@ -21,14 +23,19 @@ func main() {
 
 	flag.Parse()
 
+if !strings.Contains(*server,":") {
+*server=(*server+":64738")
+}
+
 	// Initialize
-	uc := &userConfig{}
 	b := Barnard{
 		Config:     gumble.NewConfig(),
-		UserConfig: uc,
+		UserConfig: config.NewConfig(),
 		Address:    *server,
 	}
 
+b.Hotkeys=b.UserConfig.GetHotkeys()
+b.UserConfig.SaveConfig()
 	b.Config.Username = *username
 	b.Config.Password = *password
 
