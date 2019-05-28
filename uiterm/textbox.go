@@ -82,7 +82,7 @@ func (t *Textbox) uiDraw() {
 	}
 }
 
-func (t *Textbox) uiKeyEvent(mod Modifier, key Key) {
+func (t *Textbox) uiKeyEvent(key Key) {
 	redraw := false
 	switch key {
 	case KeyHome:

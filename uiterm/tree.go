@@ -20,7 +20,7 @@ type renderedTreeItem struct {
 type Tree struct {
 	Fg, Bg    Attribute
 	Generator func(item TreeItem) []TreeItem
-	KeyListener  func(ui *Ui, tree *Tree, item TreeItem, mod Modifier, key Key)
+	KeyListener  func(ui *Ui, tree *Tree, item TreeItem, key Key)
 	CharacterListener  func(ui *Ui, tree *Tree, item TreeItem, chr rune)
 
 	lines      []renderedTreeItem
@@ -163,7 +163,7 @@ if relative {
 }
 }
 
-func (t *Tree) uiKeyEvent(mod Modifier, key Key) {
+func (t *Tree) uiKeyEvent(key Key) {
 var runHandler=true
 	switch key {
 	case KeyArrowUp:
@@ -174,13 +174,13 @@ t.SetActiveLine(1, true)
 runHandler=false
 }
 if runHandler==true && t.KeyListener != nil {
-			t.KeyListener(t.ui, t, t.lines[t.activeLine].Item, mod, key)
+			t.KeyListener(t.ui, t, t.lines[t.activeLine].Item, key)
 		}
 	t.uiDraw()
 }
 
 func (t *Tree) uiCharacterEvent(ch rune) {
-if (t.KeyListener!=nil) {
+if (t.CharacterListener!=nil) {
 t.CharacterListener(t.ui, t, t.lines[t.activeLine].Item, ch)
 }
 }

@@ -119,10 +119,17 @@ func (ui *Ui) Run() error {
 				ui.manager.OnUiResize(ui, event.Width, event.Height)
 				ui.Refresh()
 			case termbox.EventKey:
-				if event.Ch != 0 {
+var k = uint32(event.Key)
+				if event.Ch != 0 && event.Mod!=0 {
+k=uint32(event.Ch)
+}
+				if event.Ch != 0 && event.Mod==0 {
 					ui.onCharacterEvent(event.Ch)
 				} else {
-					ui.onKeyEvent(Modifier(event.Mod), Key(event.Key))
+if event.Mod > 0 {
+k = k + (uint32(event.Mod) << 16)
+}
+					ui.onKeyEvent(Key(k))
 				}
 			}
 		}
@@ -135,14 +142,14 @@ func (ui *Ui) onCharacterEvent(ch rune) {
 	}
 }
 
-func (ui *Ui) onKeyEvent(mod Modifier, key Key) {
+func (ui *Ui) onKeyEvent(key Key) {
 	if ui.keyListeners[key] != nil {
 		for _, listener := range ui.keyListeners[key] {
 			listener(ui, key)
 		}
 	}
 	if ui.activeElement != nil {
-		ui.activeElement.View.uiKeyEvent(mod, key)
+		ui.activeElement.View.uiKeyEvent(key)
 	}
 }
 

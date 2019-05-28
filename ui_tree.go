@@ -35,7 +35,7 @@ func (ti TreeItem) TreeItemStyle(fg, bg uiterm.Attribute, active bool) (uiterm.A
 func (b *Barnard) TreeItemCharacter(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm.TreeItem, ch rune) {
 }
 
-func (b *Barnard) TreeItemKeyPress(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm.TreeItem, mod uiterm.Modifier, key uiterm.Key) {
+func (b *Barnard) TreeItemKeyPress(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm.TreeItem, key uiterm.Key) {
 	treeItem := item.(TreeItem)
 	if key == uiterm.KeyEnter {
 		if treeItem.Channel != nil {

@@ -47,7 +47,7 @@ func (l *Label) uiDraw() {
 	}
 }
 
-func (l *Label) uiKeyEvent(mod Modifier, key Key) {
+func (l *Label) uiKeyEvent(key Key) {
 }
 
 func (l *Label) uiCharacterEvent(chr rune) {

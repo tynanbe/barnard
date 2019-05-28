@@ -153,7 +153,7 @@ func (t *Textview) uiDraw() {
 	} //each y
 } //func
 
-func (t *Textview) uiKeyEvent(mod Modifier, key Key) {
+func (t *Textview) uiKeyEvent(key Key) {
 }
 
 func (t *Textview) uiCharacterEvent(chr rune) {
