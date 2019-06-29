@@ -1,0 +1,163 @@
+#!/bin/bash
+# barnard-ui
+# Description: Make managing servers with barnard easy.
+#
+# Copyright 2019, F123 Consulting, <information@f123.org>
+# Copyright 2019, Storm Dragon, <storm_dragon@linux-a11y.org>
+#
+# This is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free
+# Software Foundation; either version 3, or (at your option) any later
+# version.
+#
+# This software is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this package; see the file COPYING.  If not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+#
+#--code--
+ 
+# the gettext essentials
+export TEXTDOMAIN=barnard-ui
+export TEXTDOMAINDIR=/usr/share/locale
+source gettext.sh
+
+# Log writing function
+log() {
+    # Usage: command | log for just stdout.
+	# Or command |& log for stderr and stdout.
+    while read -r line ; do
+        echo "$line" | tee -a "$logFile" &> /dev/null
+    done
+}
+ 
+# Log file name is ~/.cache/scriptname.log
+logFile="$HOME/.cache/${0##*/}.log"
+# Clear previous logs
+echo -n | tee "$logFile" &> /dev/null
+
+# Settings to improve accessibility of dialog.
+export DIALOGOPTS='--insecure --no-lines --visit-items'
+
+inputbox() {
+    # Returns: text entered by the user
+    # Args 1, Instructions for box.
+    # args: 2 initial text (optional)
+    dialog --backtitle "$(gettext "Enter text and press enter.")" \
+        --inputbox "$1" 0 0 "$2" --stdout
+}
+
+passwordbox() {
+    # Returns: text entered by the user
+    # Args 1, Instructions for box.
+    # args: 2 initial text (optional)
+    dialog --backtitle "$(gettext "Enter text and press enter.")" \
+        --passwordbox "$1" 0 0 "$2" --stdout
+}
+
+msgbox() {
+# Returns: None
+# Shows the provided message on the screen with an ok button.
+dialog --msgbox "$*" 10 72
+}
+
+yesno() {
+    # Returns: Yes or No
+    # Args: Question to user.
+    # Called  in if $(yesno) == "Yes"
+    # Or variable=$(yesno)
+    dialog --backtitle "$(gettext "Press 'Enter' for \"yes\" or 'Escape' for \"no\".")" --yesno "$*" 10 80 --stdout
+    if [[ $? -eq 0 ]]; then
+        echo "Yes"
+    else
+        echo "No"
+    fi
+}
+
+menulist() {
+    # Args: menu options.
+    # returns: selected tag
+    local i
+    local menuList
+    for i in $@ ; do
+        menuList+=("$i" "$i")
+    done
+    dialog --backtitle "$(gettext "Use the up and down arrow keys to find the option you want, then press enter to select it.")" \
+        --no-tags \
+        --menu "$(gettext "Please select one")" 0 0 0 "${menuList[@]}" --stdout
+}
+
+[[ -d ~/.config/barnard ]] || mkdir ~/.config/barnard
+if [[ ! -r ~/.config/barnard/servers.conf ]]; then
+    echo "Adding default mumble server." | log
+    echo "declare -Ag mumbleServerList=(" >  ~/.config/barnard/servers.conf
+    echo "[F123Light]=\"mumble.f123.org:64738\"" >> ~/.config/barnard/servers.conf
+    echo ")" >> ~/.config/barnard/servers.conf
+fi
+source ~/.config/barnard/servers.conf
+
+function add-server() {
+    local serverName="$(inputbox "$(gettext "Enter a name for the new server:")")"
+    [[ $? -ne 0 ]] && return
+    local serverAddress="$(inputbox "$(gettext "Enter the address of the server:")")"
+    [[ $? -ne 0 ]] && return
+    local serverPort="${serverAddress##*:}"
+    if ! [[ "$serverPort" =~ ^[0-9]+ ]]; then
+        serverPort=64738
+    fi
+    mumbleServerList[$serverName]="${serverAddress}:${serverPort}"
+    echo "declare -Ag mumbleServerList=(" > ~/.config/barnard/servers.conf
+    for i in "${!mumbleServerList[@]}" ; do
+        echo "[${i}]=\"${mumbleServerList[$i]}\"" >> ~/.config/barnard/servers.conf
+    done
+    echo ")" >> ~/.config/barnard/servers.conf
+    echo "Added server $serverName ${serverAddress}:${serverPort}" | log
+    msgbox "$(gettext "Added server") $serverName"
+}
+
+connect() {
+    ifs="$IFS"
+    IFS=$'\n'
+    local serverName="$(menulist "${!mumbleServerList[@]}" "Go Back")"
+    IFS="$ifs"
+    if [[ -z "$serverName" || "$serverName" == "Go Back" ]]; then
+        return
+    fi
+    command barnard -username ${USER}-${HOSTNAME} -server ${mumbleServerList[$serverName]} |& log
+}
+
+remove-server() {
+    ifs="$IFS"
+    IFS=$'\n'
+    local serverName="$(menulist "${!mumbleServerList[@]}" "Go Back")"
+    IFS="$ifs"
+    if [[ -z "$serverName" || "$serverName" == "Go Back" ]]; then
+        return
+    fi
+    unset "mumbleServerList[$serverName]"
+    echo "declare -Ag mumbleServerList=(" > ~/.config/barnard/servers.conf
+    for i in "${!mumbleServerList[@]}" ; do
+        echo "[${i}]=\"${mumbleServerList[$i]}\"" >> ~/.config/barnard/servers.conf
+    done
+    echo ")" >> ~/.config/barnard/servers.conf
+    echo "Removed server $serverName ${serverAddress}:${serverPort}" | log
+    msgbox "$(gettext "Removed server") $serverName"
+  }  
+
+# main menu
+while : ; do
+    action="$(menulist "Connect" "Add_server" "Remove_server" "Exit")"
+    action="${action,,}"
+    action="${action//_/-}"
+    if [[ "$action" == "exit" ]]; then
+            exit 0
+    fi
+
+    eval "$action"
+
+done

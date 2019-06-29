@@ -1,5 +1,15 @@
 # barnard
 
+## Connecting Via Text Interface
+
+You can now manage your server lists in a text GUI.
+An Ncurses interface has been created by members of the [F123 Group](https://gitlab.com/f123).
+Make sure the folder in which you store the barnard binary is in your path. This should be the default for any f123 user.
+Then just run ./barnard-ui from this folder, and follow the instructions.
+You can add barnard-ui to your path as well, and access it from amnwyere.
+
+## Modifications
+
 This copy of Barnard and it's associated Gumble library have been modified to support usage by blind users.
 Our thanks go out to Tim Cooper for the massive amount of work put into this client, originally found at [github.com/layeh/barnard](https://github.com/layeh/barnard).
 
