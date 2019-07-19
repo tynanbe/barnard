@@ -20,6 +20,7 @@ config *exportableConfig
 
 type exportableConfig struct {
  Hotkeys *Hotkeys
+ MicVolume *float32
 	Servers []*server
 }
 
@@ -79,6 +80,10 @@ os.Exit(1)
 } //if data
 } //if exists
 		c.config = &jc
+if c.config.MicVolume == nil {
+micvol := float32(1.0)
+jc.MicVolume=&micvol
+}
 }
 
 func (c *Config) findServer(address string) *server {
@@ -124,6 +129,11 @@ Volume: 1.0,
 		s.Users = append(s.Users, t)
 	}
 	return t
+}
+
+func (c *Config) SetMicVolume(v float32) {
+t := float32(v)
+c.config.MicVolume=&t
 }
 
 func (c *Config) GetHotkeys() *Hotkeys {

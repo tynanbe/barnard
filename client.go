@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+"time"
 
 	"github.com/bmmcginty/gumble/gumble"
 	"github.com/bmmcginty/gumble/gumbleopenal"
@@ -14,24 +15,40 @@ func (b *Barnard) start() {
 	b.Config.Attach(gumbleutil.AutoBitrate)
 	b.Config.Attach(b)
 	b.Config.Address = b.Address
-
-	var err error
-	_, err = gumble.DialWithDialer(new(net.Dialer), b.Config, &b.TLSConfig)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
-	}
-
-	// Audio
 	if os.Getenv("ALSOFT_LOGLEVEL") == "" {
 		os.Setenv("ALSOFT_LOGLEVEL", "0")
 	}
-	if stream, err := gumbleopenal.New(b.Client); err != nil {
+//connect, not reconnect
+b.connect(false)
+}
+
+func (b *Barnard) connect(reconnect bool) bool {
+	var err error
+	_, err = gumble.DialWithDialer(new(net.Dialer), b.Config, &b.TLSConfig)
+	if err != nil {
+if(reconnect) {
+b.Log(err.Error())
+} else {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		os.Exit(1)
+}
+return false
+	}
+
+	// Audio
+	stream, err := gumbleopenal.New(b.Client)
+if err != nil {
+if(reconnect) {
+b.Log(err.Error())
+} else {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		os.Exit(1)
+}
+return false
 	} else {
 		b.Stream = stream
 	}
+return true
 }
 
 func (b *Barnard) OnConnect(e *gumble.ConnectEvent) {
@@ -65,6 +82,17 @@ func (b *Barnard) OnDisconnect(e *gumble.DisconnectEvent) {
 	}
 	b.UiTree.Rebuild()
 	b.Ui.Refresh()
+go b.reconnectGoroutine()
+}
+
+func (b *Barnard) reconnectGoroutine() {
+for {
+res := b.connect(true)
+if res==true {
+break
+}
+time.Sleep(15 * time.Second)
+}
 }
 
 func (b *Barnard) Log(s string) {

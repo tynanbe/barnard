@@ -85,22 +85,45 @@ func (b *Barnard) OnTimestampToggle(ui *uiterm.Ui, key uiterm.Key) {
 	b.UiOutput.ToggleTimestamps()
 }
 
-func (b *Barnard) OnVoiceToggle(ui *uiterm.Ui, key uiterm.Key) {
-	if b.UiStatus.Text != " Idle " {
-		b.UiStatus.Text = " Idle "
-		b.UiStatus.Fg = uiterm.ColorBlack
-		b.UiStatus.Bg = uiterm.ColorWhite
-		b.Stream.StopSource()
-	} else {
+func (b *Barnard) UpdateGeneralStatus(text string, notice bool) {
+//		if (b.UiStatus.Text == text) {
+//return
+//}
+if(notice) {
 		b.UiStatus.Fg = uiterm.ColorWhite | uiterm.AttrBold
 		b.UiStatus.Bg = uiterm.ColorRed
-		b.UiStatus.Text = "  Tx  "
+} else {
+		b.UiStatus.Fg = uiterm.ColorBlack
+		b.UiStatus.Bg = uiterm.ColorWhite
+}
+		b.UiStatus.Text = text
+	b.Ui.Refresh()
+}
+
+func (b *Barnard) OnVoiceToggle(ui *uiterm.Ui, key uiterm.Key) {
+	if b.Tx {
+b.Tx=false
+b.UpdateGeneralStatus(" Idle ",false)
+		b.Stream.StopSource()
+	} else {
+ b.Tx=true
 		err := b.Stream.StartSource()
 		if err != nil {
-			b.UiStatus.Text = err.Error()
-		}
-	}
-	ui.Refresh()
+			b.UpdateGeneralStatus(err.Error(),true)
+} else {
+b.UpdateGeneralStatus(" Tx  ",true)
+} //if error transmit
+		} //not transmitting
+	} //func
+
+func (b *Barnard) OnMicVolumeDown(ui *uiterm.Ui, key uiterm.Key) {
+b.Stream.SetMicVolume(-0.1,true)
+b.UserConfig.SetMicVolume(b.Stream.GetMicVolume())
+}
+
+func (b *Barnard) OnMicVolumeUp(ui *uiterm.Ui, key uiterm.Key) {
+b.Stream.SetMicVolume(0.1,true)
+b.UserConfig.SetMicVolume(b.Stream.GetMicVolume())
 }
 
 func (b *Barnard) OnQuitPress(ui *uiterm.Ui, key uiterm.Key) {

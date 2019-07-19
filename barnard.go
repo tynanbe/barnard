@@ -19,6 +19,7 @@ Hotkeys *config.Hotkeys
 	TLSConfig tls.Config
 
 	Stream *gumbleopenal.Stream
+ Tx bool
 
 	Ui              *uiterm.Ui
 	UiOutput        uiterm.Textview
