@@ -247,7 +247,6 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 	b.Ui.SetActive(uiViewInput)
 	b.UiTree.Rebuild()
 	b.Ui.Refresh()
-
 }
 
 func (b *Barnard) OnUiResize(ui *uiterm.Ui, width, height int) {

@@ -18,7 +18,7 @@ func (b *Barnard) start() {
 	if os.Getenv("ALSOFT_LOGLEVEL") == "" {
 		os.Setenv("ALSOFT_LOGLEVEL", "0")
 	}
-		fmt.Fprintf(os.Stderr, "%s\n", "connecting")
+//		fmt.Fprintf(os.Stderr, "%s\n", "connecting")
 //connect, not reconnect
 b.connect(false)
 }
@@ -71,6 +71,7 @@ b.UserConfig.UpdateUser(u)
 	if e.WelcomeMessage != nil {
 		b.AddOutputLine(fmt.Sprintf("Welcome message: %s", esc(*e.WelcomeMessage)))
 	}
+	b.Ui.Refresh()
 }
 
 func (b *Barnard) OnDisconnect(e *gumble.DisconnectEvent) {
@@ -145,6 +146,7 @@ b.UserConfig.UpdateUser(e.User)
 }
 
 func (b *Barnard) OnChannelChange(e *gumble.ChannelChangeEvent) {
+		b.UpdateInputStatus(fmt.Sprintf("[%s]", e.Channel.Name))
 	b.UiTree.Rebuild()
 	b.Ui.Refresh()
 }
