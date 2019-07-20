@@ -1,12 +1,12 @@
 package main
 
 import (
+"fmt"
+"os"
 "strings"
 "github.com/bmmcginty/barnard/config"
 	"crypto/tls"
 	"flag"
-	"fmt"
-	"os"
 
 	"github.com/bmmcginty/barnard/uiterm"
 	"github.com/bmmcginty/gumble/gumble"
@@ -53,4 +53,8 @@ b.UserConfig.SaveConfig()
 
 	b.Ui = uiterm.New(&b)
 	b.Ui.Run()
+if b.exitMessage!="" {
+fmt.Fprintf(os.Stderr,"%s\n",b.exitMessage)
+}
+os.Exit(b.exitStatus)
 }

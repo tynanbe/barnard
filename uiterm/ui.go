@@ -10,6 +10,7 @@ import (
 type KeyListener func(ui *Ui, key Key)
 
 type UiManager interface {
+	OnUiDoneInitialize(ui *Ui)
 	OnUiInitialize(ui *Ui)
 	OnUiResize(ui *Ui, width, height int)
 }
@@ -108,6 +109,7 @@ func (ui *Ui) Run() error {
 	width, height := termbox.Size()
 	ui.manager.OnUiResize(ui, width, height)
 	ui.Refresh()
+	ui.manager.OnUiDoneInitialize(ui)
 
 	for {
 		select {

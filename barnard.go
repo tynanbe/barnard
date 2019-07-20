@@ -20,6 +20,7 @@ Hotkeys *config.Hotkeys
 
 	Stream *gumbleopenal.Stream
  Tx bool
+ Connected bool
 
 	Ui              *uiterm.Ui
 	UiOutput        uiterm.Textview
@@ -29,4 +30,7 @@ Hotkeys *config.Hotkeys
 	UiInputStatus   uiterm.Label
 	SelectedChannel *gumble.Channel
 	selectedUser    *gumble.User
+
+exitStatus int
+exitMessage string
 }

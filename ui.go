@@ -101,10 +101,13 @@ if(notice) {
 }
 
 func (b *Barnard) OnVoiceToggle(ui *uiterm.Ui, key uiterm.Key) {
-	if b.Tx {
+	if (b.Tx) {
 b.Tx=false
 b.UpdateGeneralStatus(" Idle ",false)
 		b.Stream.StopSource()
+} else if b.Connected==false {
+b.Tx=false
+b.UpdateGeneralStatus("no tx while disconnected",true)
 	} else {
  b.Tx=true
 		err := b.Stream.StartSource()
@@ -182,6 +185,10 @@ func (b *Barnard) GotoChat() {
 	b.OnFocusPress(b.Ui, uiterm.KeyTab)
 }
 
+func (b *Barnard) OnUiDoneInitialize(ui *uiterm.Ui) {
+b.start()
+}
+
 func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 	ui.Add(uiViewLogo, &uiterm.Label{
 		Text: "Barnard ",
@@ -237,8 +244,10 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 	b.Ui.AddKeyListener(b.OnScrollOutputDown, b.Hotkeys.ScrollDown)
 	b.Ui.AddKeyListener(b.OnScrollOutputTop, b.Hotkeys.ScrollToTop)
 	b.Ui.AddKeyListener(b.OnScrollOutputBottom, b.Hotkeys.ScrollToBottom)
+	b.Ui.SetActive(uiViewInput)
+	b.UiTree.Rebuild()
+	b.Ui.Refresh()
 
-	b.start()
 }
 
 func (b *Barnard) OnUiResize(ui *uiterm.Ui, width, height int) {

@@ -18,6 +18,7 @@ func (b *Barnard) start() {
 	if os.Getenv("ALSOFT_LOGLEVEL") == "" {
 		os.Setenv("ALSOFT_LOGLEVEL", "0")
 	}
+		fmt.Fprintf(os.Stderr, "%s\n", "connecting")
 //connect, not reconnect
 b.connect(false)
 }
@@ -29,8 +30,9 @@ func (b *Barnard) connect(reconnect bool) bool {
 if(reconnect) {
 b.Log(err.Error())
 } else {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+b.Ui.Close()
+b.exitStatus=1
+b.exitMessage=err.Error()
 }
 return false
 	}
@@ -41,13 +43,15 @@ if err != nil {
 if(reconnect) {
 b.Log(err.Error())
 } else {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+b.Ui.Close()
+b.exitStatus=1
+b.exitMessage=err.Error()
 }
 return false
 	} else {
 		b.Stream = stream
 	}
+b.Connected=true
 return true
 }
 
@@ -80,6 +84,8 @@ func (b *Barnard) OnDisconnect(e *gumble.DisconnectEvent) {
 	} else {
 		b.AddOutputLine("Disconnected: " + reason)
 	}
+b.Tx=false
+b.Connected=false
 	b.UiTree.Rebuild()
 	b.Ui.Refresh()
 go b.reconnectGoroutine()
