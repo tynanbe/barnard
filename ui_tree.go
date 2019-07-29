@@ -17,7 +17,7 @@ func (ti TreeItem) String() string {
 		return ti.User.Name
 	}
 	if ti.Channel != nil {
-		return ti.Channel.Name
+		return "#"+ti.Channel.Name
 	}
 	return ""
 }
