@@ -20,6 +20,7 @@ func main() {
 	password := flag.String("password", "", "the password of the server")
 	insecure := flag.Bool("insecure", false, "skip server certificate verification")
 	certificate := flag.String("certificate", "", "PEM encoded certificate and private key")
+	cfgfn := flag.String("config", "~/.barnard.yaml", "Path to YAML formatted configuration file")
 
 	flag.Parse()
 
@@ -30,7 +31,7 @@ if !strings.Contains(*server,":") {
 	// Initialize
 	b := Barnard{
 		Config:     gumble.NewConfig(),
-		UserConfig: config.NewConfig(),
+		UserConfig: config.NewConfig(cfgfn),
 		Address:    *server,
 	}
 

@@ -174,10 +174,10 @@ func (c *Config) UpdateConfig(u *gumble.User) {
 	j.Volume = u.AudioSource.GetGain()
 }
 
-func NewConfig() *Config {
+func NewConfig(fn *string) *Config {
 	var c *Config
 	c = &Config{}
-c.fn=resolvePath("~/.barnard.yaml")
+c.fn=resolvePath(*fn)
 c.LoadConfig()
 return c
 }
