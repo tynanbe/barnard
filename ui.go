@@ -110,7 +110,7 @@ b.Tx=false
 b.UpdateGeneralStatus("no tx while disconnected",true)
 	} else {
  b.Tx=true
-		err := b.Stream.StartSource()
+		err := b.Stream.StartSource(b.UserConfig.GetInputDevice())
 		if err != nil {
 			b.UpdateGeneralStatus(err.Error(),true)
 } else {

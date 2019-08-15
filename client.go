@@ -38,7 +38,7 @@ return false
 	}
 
 	// Audio
-	stream, err := gumbleopenal.New(b.Client)
+	stream, err := gumbleopenal.New(b.Client,b.UserConfig.GetInputDevice(),b.UserConfig.GetOutputDevice())
 if err != nil {
 if(reconnect) {
 b.Log(err.Error())

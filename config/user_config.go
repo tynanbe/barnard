@@ -21,6 +21,8 @@ config *exportableConfig
 type exportableConfig struct {
  Hotkeys *Hotkeys
  MicVolume *float32
+InputDevice *string
+OutputDevice *string
 	Servers []*server
 }
 
@@ -84,6 +86,14 @@ if c.config.MicVolume == nil {
 micvol := float32(1.0)
 jc.MicVolume=&micvol
 }
+if c.config.InputDevice == nil {
+idev := string("")
+jc.InputDevice=&idev
+}
+if c.config.OutputDevice == nil {
+odev := string("")
+jc.OutputDevice=&odev
+}
 }
 
 func (c *Config) findServer(address string) *server {
@@ -138,6 +148,14 @@ c.config.MicVolume=&t
 
 func (c *Config) GetHotkeys() *Hotkeys {
 return c.config.Hotkeys
+}
+
+func (c *Config) GetInputDevice() *string {
+return c.config.InputDevice
+}
+
+func (c *Config) GetOutputDevice() *string {
+return c.config.OutputDevice
 }
 
 func (c *Config) UpdateUser(u *gumble.User) {
