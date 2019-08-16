@@ -10,8 +10,31 @@ import (
 
 	"github.com/bmmcginty/barnard/uiterm"
 	"github.com/bmmcginty/gumble/gumble"
+	"github.com/bmmcginty/go-openal/openal"
 	_ "github.com/bmmcginty/gumble/opus"
 )
+
+func show_devs(name string, args []string) {
+if args == nil {
+fmt.Printf("no items for %s\n",name)
+}
+fmt.Printf("%s\n",name)
+for i:=0; i<len(args); i++ {
+fmt.Printf("%s\n",args[i])
+}
+}
+
+func do_list_devices() {
+odevs := openal.GetStrings(openal.AllDevicesSpecifier)
+if odevs!=nil && len(odevs)>0 {
+show_devs("All outputs:",odevs)
+} else {
+odevs=openal.GetStrings(openal.DeviceSpecifier)
+show_devs("All outputs:",odevs)
+}
+idevs := openal.GetStrings(openal.CaptureDeviceSpecifier)
+show_devs("Inputs:",idevs)
+}
 
 func main() {
 	// Command line flags
@@ -21,8 +44,18 @@ func main() {
 	insecure := flag.Bool("insecure", false, "skip server certificate verification")
 	certificate := flag.String("certificate", "", "PEM encoded certificate and private key")
 	cfgfn := flag.String("config", "~/.barnard.yaml", "Path to YAML formatted configuration file")
+	list_devices := flag.Bool("list_devices", false, "do not connect; instead, list available audio devices and exit")
 
 	flag.Parse()
+
+	if os.Getenv("ALSOFT_LOGLEVEL") == "" {
+		os.Setenv("ALSOFT_LOGLEVEL", "0")
+	}
+
+if (*list_devices) {
+do_list_devices()
+os.Exit(0)
+}
 
 if !strings.Contains(*server,":") {
 *server=(*server+":64738")

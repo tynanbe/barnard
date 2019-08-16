@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net"
-	"os"
 "time"
 
 	"github.com/bmmcginty/gumble/gumble"
@@ -15,12 +14,20 @@ func (b *Barnard) start() {
 	b.Config.Attach(gumbleutil.AutoBitrate)
 	b.Config.Attach(b)
 	b.Config.Address = b.Address
-	if os.Getenv("ALSOFT_LOGLEVEL") == "" {
-		os.Setenv("ALSOFT_LOGLEVEL", "0")
-	}
-//		fmt.Fprintf(os.Stderr, "%s\n", "connecting")
+	// test Audio
+	_, err := gumbleopenal.New(b.Client,b.UserConfig.GetInputDevice(),b.UserConfig.GetOutputDevice(),true)
+if err != nil {
+b.exitWithError(err)
+return
+}
 //connect, not reconnect
 b.connect(false)
+}
+
+func (b *Barnard) exitWithError(err error) {
+b.Ui.Close()
+b.exitStatus=1
+b.exitMessage=err.Error()
 }
 
 func (b *Barnard) connect(reconnect bool) bool {
@@ -30,27 +37,18 @@ func (b *Barnard) connect(reconnect bool) bool {
 if(reconnect) {
 b.Log(err.Error())
 } else {
-b.Ui.Close()
-b.exitStatus=1
-b.exitMessage=err.Error()
+b.exitWithError(err)
 }
 return false
 	}
 
-	// Audio
-	stream, err := gumbleopenal.New(b.Client,b.UserConfig.GetInputDevice(),b.UserConfig.GetOutputDevice())
+	stream, err := gumbleopenal.New(b.Client,b.UserConfig.GetInputDevice(),b.UserConfig.GetOutputDevice(),false)
 if err != nil {
-if(reconnect) {
-b.Log(err.Error())
-} else {
-b.Ui.Close()
-b.exitStatus=1
-b.exitMessage=err.Error()
-}
+b.exitWithError(err)
 return false
-	} else {
-		b.Stream = stream
-	}
+}
+b.Stream=stream
+		b.Stream.AttachStream(b.Client)
 b.Connected=true
 return true
 }
