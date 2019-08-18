@@ -45,8 +45,27 @@ func main() {
 	certificate := flag.String("certificate", "", "PEM encoded certificate and private key")
 	cfgfn := flag.String("config", "~/.barnard.yaml", "Path to YAML formatted configuration file")
 	list_devices := flag.Bool("list_devices", false, "do not connect; instead, list available audio devices and exit")
+	serverSet := false
+	usernameSet := false
 
 	flag.Parse()
+	userConfig := config.NewConfig(cfgfn)
+
+	flag.CommandLine.Visit(func (theFlag *flag.Flag) {
+		switch theFlag.Name {
+		case "server":
+			serverSet = true
+		case "username":
+			usernameSet = true
+		}
+	})
+
+	if ! serverSet {
+		server = userConfig.GetDefaultServer()
+	}
+	if !usernameSet {
+		username = userConfig.GetUsername()
+	}
 
 	if os.Getenv("ALSOFT_LOGLEVEL") == "" {
 		os.Setenv("ALSOFT_LOGLEVEL", "0")
@@ -64,7 +83,7 @@ if !strings.Contains(*server,":") {
 	// Initialize
 	b := Barnard{
 		Config:     gumble.NewConfig(),
-		UserConfig: config.NewConfig(cfgfn),
+		UserConfig: userConfig,
 		Address:    *server,
 	}
 

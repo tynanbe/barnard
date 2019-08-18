@@ -24,6 +24,8 @@ type exportableConfig struct {
 InputDevice *string
 OutputDevice *string
 	Servers []*server
+	DefaultServer *string
+	Username *string
 }
 
 type server struct {
@@ -60,7 +62,7 @@ return &k
 func (c *Config) LoadConfig() {
 		var jc exportableConfig
 jc=exportableConfig{}
-jc.Hotkeys=&Hotkeys{
+	jc.Hotkeys=&Hotkeys{
 Talk: key(uiterm.KeyF1),
 VolumeDown: key(uiterm.KeyF5),
 VolumeUp: key(uiterm.KeyF6),
@@ -93,6 +95,14 @@ jc.InputDevice=&idev
 if c.config.OutputDevice == nil {
 odev := string("")
 jc.OutputDevice=&odev
+}
+if c.config.DefaultServer == nil {
+defaultServer := string("localhost:64738")
+jc.DefaultServer = &defaultServer
+}
+if c.config.Username == nil {
+username := string("")
+jc.Username = &username
 }
 }
 
@@ -156,6 +166,14 @@ return c.config.InputDevice
 
 func (c *Config) GetOutputDevice() *string {
 return c.config.OutputDevice
+}
+
+func (c *Config) GetDefaultServer() *string {
+return c.config.DefaultServer
+}
+
+func (c *Config) GetUsername() *string {
+return c.config.Username
 }
 
 func (c *Config) UpdateUser(u *gumble.User) {
