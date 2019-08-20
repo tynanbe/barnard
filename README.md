@@ -1,4 +1,4 @@
-# barnard
+# Barnard
 
 ## Connecting Via Text Interface
 
@@ -6,18 +6,35 @@ You can now manage your server lists in a text GUI.
 An Ncurses interface has been created by members of the [F123 Group](https://gitlab.com/f123).
 Make sure the folder in which you store the barnard binary is in your path. This should be the default for any f123 user.
 Then just run ./barnard-ui from this folder, and follow the instructions.
-You can add barnard-ui to your path as well, and access it from amnwyere.
+You can add barnard-ui to your path as well, and access it from anywhere.
 
 ## Modifications
 
 This copy of Barnard and it's associated Gumble library have been modified to support usage by blind users.
 Our thanks go out to Tim Cooper for the massive amount of work put into this client, originally found at [github.com/layeh/barnard](https://github.com/layeh/barnard).
 
+## Config
+
+By default, the file $HOME/.barnard.yaml will hold the configuration for Barnard.
+You can have barnard read another file by using the -c option, like `./barnard -c ~/.anotherbarnard.yaml`.
+It will be created automatically if it doesn't exist.
+If you modify the config file while Barnard is running, your changes may be overwritten.
+
+## Defaults
+
+You can set username and server in your config file, and they will be used if none is specified when launching barnard.
+(Note that the default username (an empty string) and the default server name (localhost:64738) have been the defaults for barnard up to this  point, and have been left that way for compatibility.)
+
+## Audio Devices
+
+You can set the default input and output devices in the config file as well.
+Pass the -list_devices parameter to barnard to be given a list of audio input and output devices.
+Copy lines from the above list into inputdevice and outputdevice as desired.
+To clear your inputdevice or outputdevice options and set them to defaults, set them to "" or delete them entirely.
+
 ## Keystrokes
 
-The below keystroeks will be automatically created in the $HOME/.barnard.yaml file, if it does not already exist.
-They can be customized in that file when Barnard is not running.
-If you edit the file when Barnard _is running, your changes will be overwritten.
+You can see the below keystrokes in your config file.
 
 Pressing tab inside the main window switches between the user/channel tree view and the message input box.
 When in the message input box:
