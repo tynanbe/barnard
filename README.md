@@ -22,7 +22,7 @@ If you modify the config file while Barnard is running, your changes may be over
 
 ## Defaults
 
-You can set username and server in your config file, and they will be used if none is specified when launching barnard.
+You can set username and defaultserver in your config file, and they will be used if none is specified when launching barnard.
 (Note that the default username (an empty string) and the default server name (localhost:64738) have been the defaults for barnard up to this  point, and have been left that way for compatibility.)
 
 ## Audio Devices
