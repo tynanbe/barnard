@@ -22,7 +22,7 @@ const (
 	uiViewTree        = "tree"
 )
 
-func beep() {
+func Beep() {
 	cmd := exec.Command("beep")
 	cmdout, err := cmd.Output()
 	if err != nil {
@@ -36,8 +36,12 @@ func esc(str string) string {
 	return sanitize.HTML(str)
 }
 
+func(b *Barnard) Notify(event string, who string, what string) {
+b.notifyChannel <- []string{event,who,what}
+}
+
 func(b *Barnard) Beep() {
-beep()
+Beep()
 }
 
 func (b *Barnard) SetSelectedUser(user *gumble.User) {
@@ -101,15 +105,44 @@ if(notice) {
 }
 
 func (b *Barnard) OnVoiceToggle(ui *uiterm.Ui, key uiterm.Key) {
+b.setTransmit(ui,2)
+}
+
+func (b *Barnard) CommandLog(ui *uiterm.Ui, cmd string) {
+b.AddOutputLine("command "+cmd)
+}
+
+func (b *Barnard) CommandTalk(ui *uiterm.Ui, cmd string) {
+b.setTransmit(ui,2)
+}
+
+func (b *Barnard) CommandMicUp(ui *uiterm.Ui, cmd string) {
+b.setTransmit(ui,1)
+}
+
+func (b *Barnard) CommandMicDown(ui *uiterm.Ui, cmd string) {
+b.setTransmit(ui,0)
+}
+
+func (b *Barnard) setTransmit(ui *uiterm.Ui, val int) {
+if b.Tx && val==1 {
+return
+}
+if b.Tx==false && val==0 {
+return
+}
 	if (b.Tx) {
+b.Notify("micdown","me","")
 b.Tx=false
 b.UpdateGeneralStatus(" Idle ",false)
 		b.Stream.StopSource()
 } else if b.Connected==false {
+b.Notify("micdown","me","")
 b.Tx=false
 b.UpdateGeneralStatus("no tx while disconnected",true)
 	} else {
  b.Tx=true
+b.Notify("micup","me","")
 		err := b.Stream.StartSource(b.UserConfig.GetInputDevice())
 		if err != nil {
 			b.UpdateGeneralStatus(err.Error(),true)
@@ -130,6 +163,11 @@ b.UserConfig.SetMicVolume(b.Stream.GetMicVolume())
 }
 
 func (b *Barnard) OnQuitPress(ui *uiterm.Ui, key uiterm.Key) {
+	b.Client.Disconnect()
+	b.Ui.Close()
+}
+
+func (b *Barnard) CommandExit(ui *uiterm.Ui, cmd string) {
 	b.Client.Disconnect()
 	b.Ui.Close()
 }
@@ -236,6 +274,12 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 	}
 	ui.Add(uiViewTree, &b.UiTree)
 
+//add this to see what your commands are coming in as raw strings
+//	b.Ui.AddCommandListener(b.CommandLog, "*")
+	b.Ui.AddCommandListener(b.CommandMicUp, "micup")
+	b.Ui.AddCommandListener(b.CommandMicDown, "micdown")
+	b.Ui.AddCommandListener(b.CommandTalk, "talk")
+	b.Ui.AddCommandListener(b.CommandExit, "exit")
 	b.Ui.AddKeyListener(b.OnFocusPress, b.Hotkeys.SwitchViews)
 	b.Ui.AddKeyListener(b.OnVoiceToggle, b.Hotkeys.Talk)
 	b.Ui.AddKeyListener(b.OnTimestampToggle, b.Hotkeys.ToggleTimestamps)

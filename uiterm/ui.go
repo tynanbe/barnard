@@ -2,12 +2,14 @@ package uiterm
 
 import (
 	"errors"
+"strings"
 	"sync/atomic"
 
 	"github.com/nsf/termbox-go"
 )
 
 type KeyListener func(ui *Ui, key Key)
+type CommandListener func(ui *Ui, cmd string)
 
 type UiManager interface {
 	OnUiInitialize(ui *Ui)
@@ -26,6 +28,7 @@ type Ui struct {
 	activeElement *uiElement
 
 	keyListeners map[Key][]KeyListener
+	commandListeners map[string][]CommandListener
 }
 
 type uiElement struct {
@@ -40,6 +43,7 @@ func New(manager UiManager) *Ui {
 		elements:     make(map[string]*uiElement),
 		manager:      manager,
 		keyListeners: make(map[Key][]KeyListener),
+		commandListeners: make(map[string][]CommandListener),
 	}
 	return ui
 }
@@ -88,7 +92,7 @@ func (ui *Ui) SetActive(name string) {
 	}
 }
 
-func (ui *Ui) Run() error {
+func (ui *Ui) Run(cmds chan string) error {
 	if termbox.IsInit {
 		return nil
 	}
@@ -115,6 +119,8 @@ func (ui *Ui) Run() error {
 		select {
 		case <-ui.close:
 			return nil
+  case cmd := <-cmds:
+ui.onCommandEvent(cmd)
 		case event := <-events:
 			switch event.Type {
 			case termbox.EventResize:
@@ -155,6 +161,28 @@ func (ui *Ui) onKeyEvent(key Key) {
 	}
 }
 
+func (ui *Ui) onCommandEvent(cmd string) {
+ ta := strings.SplitN(cmd," ",2)
+t := ta[0]
+rest := ""
+if len(ta)==2 {
+rest=ta[1]
+}
+	if ui.commandListeners[t] != nil {
+		for _, listener := range ui.commandListeners[t] {
+			listener(ui, rest)
+		}
+	}
+	if ui.commandListeners["*"] != nil {
+		for _, listener := range ui.commandListeners["*"] {
+			listener(ui, cmd)
+		}
+	}
+//	if ui.activeElement != nil {
+//		ui.activeElement.View.uiKeyEvent(key)
+//	}
+}
+
 func (ui *Ui) Add(name string, view View) error {
 	if _, ok := ui.elements[name]; ok {
 		return errors.New("view already exists")
@@ -182,3 +210,10 @@ if key!=nil {
 	ui.keyListeners[*key] = append(ui.keyListeners[*key], listener)
 }
 }
+
+func (ui *Ui) AddCommandListener(listener CommandListener, cmd string) {
+//if cmd!=nil {
+	ui.commandListeners[cmd] = append(ui.commandListeners[cmd], listener)
+//}
+}
+

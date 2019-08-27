@@ -66,8 +66,13 @@ b.UserConfig.UpdateUser(u)
 
 	b.UpdateInputStatus(fmt.Sprintf("[%s]", e.Client.Self.Channel.Name))
 	b.AddOutputLine(fmt.Sprintf("Connected to %s", b.Client.Conn.RemoteAddr()))
+wmsg := ""
 	if e.WelcomeMessage != nil {
-		b.AddOutputLine(fmt.Sprintf("Welcome message: %s", esc(*e.WelcomeMessage)))
+wmsg = esc(*e.WelcomeMessage)
+}
+b.Notify("connect","me",wmsg)
+if wmsg != "" {
+		b.AddOutputLine(fmt.Sprintf("Welcome message: %s", wmsg))
 	}
 	b.Ui.Refresh()
 }
@@ -78,6 +83,7 @@ func (b *Barnard) OnDisconnect(e *gumble.DisconnectEvent) {
 	case gumble.DisconnectError:
 		reason = "connection error"
 	}
+b.Notify("disconnect","me",reason)
 	if reason == "" {
 		b.AddOutputLine("Disconnected")
 	} else {
@@ -113,8 +119,10 @@ func (b *Barnard) OnTextMessage(e *gumble.TextMessageEvent) {
 		}
 	}
 	if public {
+b.Notify("msg",e.Sender.Name,e.Message)
 		b.AddOutputMessage(e.Sender, e.Message)
 	} else {
+b.Notify("pm",e.Sender.Name,e.Message)
 		b.AddOutputPrivateMessage(e.Sender, b.Client.Self, e.Message)
 	}
 }
@@ -124,16 +132,20 @@ if e.User != nil {
 b.UserConfig.UpdateUser(e.User)
 }
 	var s = "unknown"
+ var t = "unknown"
 	if e.Type.Has(gumble.UserChangeConnected) {
 		s = "joined"
+t="join"
 	}
 	if e.Type.Has(gumble.UserChangeDisconnected) {
 		s = "left"
+t="leave"
 		if e.User == b.selectedUser {
 			b.SetSelectedUser(nil)
 		}
 	}
 	if e.User.Channel.Name == b.Client.Self.Channel.Name {
+b.Notify(t,e.User.Name,e.User.Channel.Name)
 		b.AddOutputLine(fmt.Sprintf("%s %s %s", e.User.Name, s, e.User.Channel.Name))
 	}
 	if e.Type.Has(gumble.UserChangeChannel) && e.User == b.Client.Self {

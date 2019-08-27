@@ -7,4 +7,5 @@ type View interface {
 	uiDraw()
 	uiKeyEvent(key Key)
 	uiCharacterEvent(ch rune)
+// commandEvent(cmd string)
 }

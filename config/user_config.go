@@ -26,6 +26,7 @@ OutputDevice *string
 	Servers []*server
 	DefaultServer *string
 	Username *string
+ NotifyCommand *string
 }
 
 type server struct {
@@ -104,6 +105,10 @@ if c.config.Username == nil {
 username := string("")
 jc.Username = &username
 }
+if c.config.NotifyCommand == nil {
+ncmd := string("")
+jc.NotifyCommand=&ncmd
+}
 }
 
 func (c *Config) findServer(address string) *server {
@@ -158,6 +163,10 @@ c.config.MicVolume=&t
 
 func (c *Config) GetHotkeys() *Hotkeys {
 return c.config.Hotkeys
+}
+
+func (c *Config) GetNotifyCommand() *string {
+return c.config.NotifyCommand
 }
 
 func (c *Config) GetInputDevice() *string {

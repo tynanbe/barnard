@@ -31,6 +31,8 @@ Hotkeys *config.Hotkeys
 	SelectedChannel *gumble.Channel
 	selectedUser    *gumble.User
 
+notifyChannel chan []string
+
 exitStatus int
 exitMessage string
 }

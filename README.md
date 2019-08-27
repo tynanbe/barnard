@@ -1,5 +1,51 @@
 # Barnard
 
+## Documentation
+
+Please feel free to give suggestions and corrections for this file (as wellas Barnard propper).
+
+## FIFO Control
+
+If you pass the --fifo option to Barnard, a FIFO pipe will be created.
+You can control Barnard by sending commands to this FIFO.
+Each command must end with a  \n character.
+Current Commands:
+* micup: Start transmitting, just as when you hold down the talk key. Does nothing if you are already transmiting.
+* micdown: Stop transmitting, just like when you release your talk key. Does nothing if you are not already transmitting.
+* toggle: Toggle your transmission state.
+* exit: Exit Barnard, just like whenyou press your quit key.
+
+## Event Notification
+
+You can use the notifycommand parameter in your config file to run a program on certain events.
+Each event has the following parameters:
+* event: the name of the event
+    - join: user has joined the channel you are in
+    - leave: user has left the channel you are in
+    - micup: you have begun transmitting
+    - micdown: you have stopped transmitting
+    - connect: you have connected to a server
+    - disconnect: you have disconnected from a server
+    - msg: the channel you are currently connected to has received a message
+    - pm: you have received a private message
+* who: the person causing initiation of the event ("me" for self-generated events)
+* what: the body of the event as applicable (message, channel name, etc)
+
+Warning:
+Keep in mind that Barnard opens an Alsa sound device when starting.
+For this reason, any notification command used here will need to be able to work while other sound is playing.
+It is recommended that you test  your notification command by hand, while Barnard is running, before including it here.
+
+You can create a command that will take any of these parameters as desired, by prepending the name of the parameter in your command with a % (percent) sign.
+As an example, to attempt to play wave files for each event, you could set notifycommand to:
+aplay /home/username/sounds/mumble/%event.wav
+When you begin transmitting, aplay will attempt to play /home/username/sounds/mumble/micup.wav.
+The same will be attempted for the other events, such as leave, join, micdown, etc.
+
+In order to process messages and the like, Barnard will parse your command as a properly quoted shell command.
+For this reason, you should put quotes around arguments that have spaces.
+If you want to do more complex things, write a shell script (or c application, python script, etc) to process the arguments passed into it.
+
 ## Connecting Via Text Interface
 
 You can now manage your server lists in a text GUI.
