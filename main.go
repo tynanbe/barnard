@@ -8,7 +8,9 @@ import (
 "fmt"
 "os"
 "strings"
-"github.com/google/shlex"
+//"gopkg.in/alessio/shellescape.v1"
+//"github.com/google/shlex"
+"github.com/alessio/shellescape"
 "github.com/bmmcginty/barnard/config"
 	"crypto/tls"
 	"flag"
@@ -46,33 +48,24 @@ t := make(chan []string)
 var do_nothing = false
 var err error
 if err!=nil { }
-pcmd := make([]string,0)
 if notify_command=="" {
 do_nothing = true
-} else {
-pcmd,err = shlex.Split(notify_command)
-//			fmt.Fprintf(os.Stderr, "cmd `%s` `%r`\n", notify_command,pcmd)
 }
-go func(events chan []string, cmd_template []string, dummy bool) {
+go func(events chan []string, cmd_template string, dummy bool) {
 for {
 event := <-events
 if !dummy {
-t := make([]string,len(cmd_template))
-for i:=0; i<len(cmd_template); i++ {
-t[i]=cmd_template[i]
-} //make a copy of cmd
-for i:=0; i<len(t); i++ {
-t[i]=strings.ReplaceAll(t[i],"%event",event[0])
-t[i]=strings.ReplaceAll(t[i],"%who",event[1])
-t[i]=strings.ReplaceAll(t[i],"%what",event[2])
-} //do replacements
-cmd := t[0]
-args := t[1:]
+t := string(cmd_template)
+t=strings.ReplaceAll(t,"%event",shellescape.Quote(event[0]))
+t=strings.ReplaceAll(t,"%who",shellescape.Quote(event[1]))
+t=strings.ReplaceAll(t,"%what",shellescape.Quote(event[2]))
+cmd := "/bin/sh"
+args := []string{"-c",t}
 x := exec.Command(cmd, args...)
 x.Run()
 } //if we actually have a command to run
 } //for
-}(t,pcmd,do_nothing)
+}(t,notify_command,do_nothing)
 return t
 }
 

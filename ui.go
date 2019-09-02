@@ -278,6 +278,7 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 //	b.Ui.AddCommandListener(b.CommandLog, "*")
 	b.Ui.AddCommandListener(b.CommandMicUp, "micup")
 	b.Ui.AddCommandListener(b.CommandMicDown, "micdown")
+	b.Ui.AddCommandListener(b.CommandTalk, "toggle")
 	b.Ui.AddCommandListener(b.CommandTalk, "talk")
 	b.Ui.AddCommandListener(b.CommandExit, "exit")
 	b.Ui.AddKeyListener(b.OnFocusPress, b.Hotkeys.SwitchViews)

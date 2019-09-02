@@ -3,6 +3,16 @@
 ## Documentation
 
 Please feel free to give suggestions and corrections for this file (as wellas Barnard propper).
+Find a sample notification script in examples/.
+
+## Audio boost
+
+If a user is too soft to hear, you can boost their audio.
+Note. The boost user property is not currently saved. You will have to set it on each run of barnard.
+Select the user from the user treeview, and press F8 to increase the boost.
+You can decrease the audio boost by pressing F7.
+F7 will lower the boost until it has been removed altogether. In other words, you will have your original audio back with enough F7 presses.
+Keep in mind that boost and volume are different controls. If you need just a bit less audio than boost has provided, use your VolumeUp/VolumeDown keys to change the audio by smaller amounts.
 
 ## FIFO Control
 
@@ -13,7 +23,8 @@ Current Commands:
 * micup: Start transmitting, just as when you hold down the talk key. Does nothing if you are already transmiting.
 * micdown: Stop transmitting, just like when you release your talk key. Does nothing if you are not already transmitting.
 * toggle: Toggle your transmission state.
-* exit: Exit Barnard, just like whenyou press your quit key.
+* talk: Synonym for toggle.
+* exit: Exit Barnard, just like when you press your quit key.
 
 ## Event Notification
 

@@ -67,6 +67,8 @@ jc=exportableConfig{}
 Talk: key(uiterm.KeyF1),
 VolumeDown: key(uiterm.KeyF5),
 VolumeUp: key(uiterm.KeyF6),
+BoostDown: key(uiterm.KeyF7),
+BoostUp: key(uiterm.KeyF8),
 Exit: key(uiterm.KeyF10),
 ToggleTimestamps: key(uiterm.KeyF3),
 SwitchViews: key(uiterm.KeyTab),

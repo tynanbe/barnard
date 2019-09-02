@@ -57,6 +57,7 @@ func (b *Barnard) OnConnect(e *gumble.ConnectEvent) {
 	b.Client = e.Client
 
 for _,u := range b.Client.Users {
+u.Boost=uint16(1)
 b.UserConfig.UpdateUser(u)
 }
 

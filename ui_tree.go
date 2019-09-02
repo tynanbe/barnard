@@ -57,11 +57,11 @@ func (b *Barnard) TreeItemKeyPress(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm
 		var c = treeItem.Channel
 		var change = float32(0.0)
 		var changeType = ""
-		if key == uiterm.KeyF5 {
+		if key == *b.Hotkeys.VolumeDown {
 			changeType = "volume"
 			change = -0.1
 		}
-		if key == uiterm.KeyF6 {
+		if key == *b.Hotkeys.VolumeUp {
 			changeType = "volume"
 			change = 0.1
 		}
@@ -91,13 +91,18 @@ b.UserConfig.SaveConfig()
 if au!=nil {
 		var set_gain = false
 var gain float32
-		//if key==uiterm.KeyF7 {
-		//au.SetPitch(au.GetPitch()-0.1)
-		//}
-		//if key==uiterm.KeyF8 {
-		//au.SetPitch(au.GetPitch()+0.1)
-		//}
-		if key == uiterm.KeyF5 {
+		if key==*b.Hotkeys.BoostDown {
+u.Boost-=1
+if u.Boost<1 {
+u.Boost=1
+}
+//		au.SetPitch(au.GetPitch()-0.1)
+		}
+		if key==*b.Hotkeys.BoostUp {
+u.Boost+=1
+//		au.SetPitch(au.GetPitch()+0.1)
+		}
+		if key == *b.Hotkeys.VolumeDown {
 			set_gain = true
 			var mingain = au.GetMinGain()
 			gain = au.GetGain()
@@ -106,7 +111,7 @@ var gain float32
 				gain = mingain
 			}
 		} //f5
-		if key == uiterm.KeyF6 {
+		if key == *b.Hotkeys.VolumeUp {
 set_gain=true
 			var maxgain = au.GetMaxGain()
 			gain = au.GetGain()
