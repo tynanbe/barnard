@@ -2,7 +2,7 @@ package main
 
 import (
 //"math"
-	"fmt"
+//	"fmt"
 	"github.com/bmmcginty/barnard/uiterm"
 	"github.com/bmmcginty/gumble/gumble"
 	"sort"
@@ -63,7 +63,7 @@ ng=1.0
 if ng < 0 {
 ng=0.0
 }
-b.AddOutputLine(fmt.Sprintf("boost %d ng %.2f",boost,ng))
+//b.AddOutputLine(fmt.Sprintf("boost %d ng %.2f",boost,ng))
 u.Boost=boost
 				au.SetGain(ng)
 b.UserConfig.UpdateConfig(u)
