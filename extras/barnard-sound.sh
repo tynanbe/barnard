@@ -1,5 +1,29 @@
 #!/bin/bash
-
+# barnard-sound.sh
+# Description: Sounds and notification script for barnard.
+#
+# Copyright 2019, F123 Consulting, <information@f123.org>
+# Copyright 2019, Storm Dragon, <storm_dragon@linux-a11y.org>
+#
+# This is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free
+# Software Foundation; either version 3, or (at your option) any later
+# version.
+#
+# This software is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this package; see the file COPYING.  If not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+#
+#--code--
+                                                                                                                                                                
+# 1 is off, 0 is on
+notify=0
 connect() {
     play -n synth .05 pl 1050 pl 1100 remix - pad 0 .05 repeat
 }
@@ -38,9 +62,9 @@ pm() {
 
 if is_function "$1" ; then
     eval "$1" &> /dev/null
+    [[ $notify ]] && notify-send "$2: $1"
 else
     echo "The given barnard event has not yet been added."
 fi
 
-is_function "$1"
 exit 0
