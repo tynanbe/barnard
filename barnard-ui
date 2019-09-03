@@ -48,7 +48,7 @@ inputbox() {
     # Returns: text entered by the user
     # Args 1, Instructions for box.
     # args: 2 initial text (optional)
-    dialog --backtitle "$(gettext "Enter text and press enter.")" \
+    dialog --clear --backtitle "$(gettext "Enter text and press enter.")" \
         --inputbox "$1" 0 0 "$2" --stdout
 }
 
@@ -56,14 +56,14 @@ passwordbox() {
     # Returns: text entered by the user
     # Args 1, Instructions for box.
     # args: 2 initial text (optional)
-    dialog --backtitle "$(gettext "Enter text and press enter.")" \
+    dialog --clear --backtitle "$(gettext "Enter text and press enter.")" \
         --passwordbox "$1" 0 0 "$2" --stdout
 }
 
 msgbox() {
 # Returns: None
 # Shows the provided message on the screen with an ok button.
-dialog --msgbox "$*" 10 72
+dialog --clear --msgbox "$*" 10 72
 }
 
 yesno() {
@@ -71,7 +71,7 @@ yesno() {
     # Args: Question to user.
     # Called  in if $(yesno) == "Yes"
     # Or variable=$(yesno)
-    dialog --backtitle "$(gettext "Press 'Enter' for \"yes\" or 'Escape' for \"no\".")" --yesno "$*" 10 80 --stdout
+    dialog --clear --backtitle "$(gettext "Press 'Enter' for \"yes\" or 'Escape' for \"no\".")" --yesno "$*" 10 80 --stdout
     if [[ $? -eq 0 ]]; then
         echo "Yes"
     else
@@ -88,6 +88,7 @@ menulist() {
         menuList+=("$i" "$i")
     done
     dialog --backtitle "$(gettext "Use the up and down arrow keys to find the option you want, then press enter to select it.")" \
+        --clear \
         --no-tags \
         --menu "$(gettext "Please select one")" 0 0 0 "${menuList[@]}" --stdout
 }
@@ -128,7 +129,7 @@ connect() {
     if [[ -z "$serverName" || "$serverName" == "Go Back" ]]; then
         return
     fi
-    command barnard -username ${USER}-${HOSTNAME} -server ${mumbleServerList[$serverName]} |& log
+    command barnard -username ${USER}-${HOSTNAME} -server ${mumbleServerList[$serverName]} --fifo ~/.config/barnard/cmd |& log
 }
 
 remove-server() {
