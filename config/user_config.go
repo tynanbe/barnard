@@ -37,6 +37,7 @@ type server struct {
 
 type eUser struct {
 	Username string
+ Boost uint16
 	Volume   float32
 }
 
@@ -149,6 +150,7 @@ func (c *Config) findUser(address string, username string) *eUser {
 	if t == nil {
 		t = &eUser{
 			Username: username,
+Boost: uint16(1),
 Volume: 1.0,
 		}
 		s.Users = append(s.Users, t)
@@ -191,14 +193,19 @@ var uc *gumble.Client
 uc=u.GetClient()
 if uc != nil {
 	j = c.findUser(uc.Config.Address, u.Name)
+u.Boost=j.Boost
 u.Volume=j.Volume
+if u.Boost < 1 {
+u.Boost = 1
+}
 }
 }
 
 func (c *Config) UpdateConfig(u *gumble.User) {
 	var j *eUser
 	j = c.findUser(u.GetClient().Config.Address, u.Name)
-	j.Volume = u.AudioSource.GetGain()
+ j.Boost=u.Boost
+	j.Volume = u.Volume
 }
 
 func NewConfig(fn *string) *Config {

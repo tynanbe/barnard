@@ -65,6 +65,7 @@ ng=0.0
 }
 //b.AddOutputLine(fmt.Sprintf("boost %d ng %.2f",boost,ng))
 u.Boost=boost
+u.Volume=ng
 				au.SetGain(ng)
 b.UserConfig.UpdateConfig(u)
 }

@@ -56,14 +56,13 @@ return true
 func (b *Barnard) OnConnect(e *gumble.ConnectEvent) {
 	b.Client = e.Client
 
-for _,u := range b.Client.Users {
-u.Boost=uint16(1)
-b.UserConfig.UpdateUser(u)
-}
-
 	b.Ui.SetActive(uiViewInput)
 	b.UiTree.Rebuild()
 	b.Ui.Refresh()
+
+for _,u := range b.Client.Users {
+b.UserConfig.UpdateUser(u)
+}
 
 	b.UpdateInputStatus(fmt.Sprintf("[%s]", e.Client.Self.Channel.Name))
 	b.AddOutputLine(fmt.Sprintf("Connected to %s", b.Client.Conn.RemoteAddr()))
@@ -190,6 +189,9 @@ func (b *Barnard) OnPermissionDenied(e *gumble.PermissionDeniedEvent) {
 }
 
 func (b *Barnard) OnUserList(e *gumble.UserListEvent) {
+//for _,u := range e.UserList {
+//b.UserConfig.UpdateUser(u)
+//}
 }
 
 func (b *Barnard) OnACL(e *gumble.ACLEvent) {
