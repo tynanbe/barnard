@@ -137,16 +137,17 @@ b.Tx=false
 b.UpdateGeneralStatus(" Idle ",false)
 		b.Stream.StopSource()
 } else if b.Connected==false {
-b.Notify("micdown","me","")
+b.Notify("error","me","no tx while disconnected")
 b.Tx=false
 b.UpdateGeneralStatus("no tx while disconnected",true)
 	} else {
  b.Tx=true
-b.Notify("micup","me","")
 		err := b.Stream.StartSource(b.UserConfig.GetInputDevice())
 		if err != nil {
+b.Notify("error","me",err.Error())
 			b.UpdateGeneralStatus(err.Error(),true)
 } else {
+b.Notify("micup","me","")
 b.UpdateGeneralStatus(" Tx  ",true)
 } //if error transmit
 		} //not transmitting

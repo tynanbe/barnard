@@ -9,14 +9,17 @@ Find a sample notification script in examples/.
 
 If a user is too soft to hear, you can boost their audio.
 The audio should drastically increase once you have hit the VolumeUp key over 10 times (from the silent/0 position).
-The boost setting is not currently saved, and will need to be reset each time you use Barnard or a user reconnects.
+The boost setting is saved per user, just like per user volume.
 
 ## FIFO Control
 
 If you pass the --fifo option to Barnard, a FIFO pipe will be created.
 You can control Barnard by sending commands to this FIFO.
-Each command must end with a  \n character.
+Each command must end with a  \n (0x0a) character.
+Commands may be added at any time.
+Per the robustness principle, be liberal in what you receive.
 Current Commands:
+* error: An error has occured to prevent transmitting audio, or taking another action.
 * micup: Start transmitting, just as when you hold down the talk key. Does nothing if you are already transmiting.
 * micdown: Stop transmitting, just like when you release your talk key. Does nothing if you are not already transmitting.
 * toggle: Toggle your transmission state.
