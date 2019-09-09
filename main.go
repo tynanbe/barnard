@@ -16,9 +16,9 @@ import (
 	"flag"
 
 	"github.com/bmmcginty/barnard/uiterm"
-	"github.com/bmmcginty/gumble/gumble"
+	"github.com/bmmcginty/barnard/gumble/gumble"
 	"github.com/bmmcginty/go-openal/openal"
-	_ "github.com/bmmcginty/gumble/opus"
+	_ "github.com/bmmcginty/barnard/gumble/opus"
 )
 
 func show_devs(name string, args []string) {
@@ -107,6 +107,7 @@ func main() {
 	fifo := flag.String("fifo", "", "path of a FIFO from which to read commands")
 	serverSet := false
 	usernameSet := false
+	buffers := flag.Int("buffers", 8, "number of audio buffers to use")
 
 	flag.Parse()
 	userConfig := config.NewConfig(cfgfn)
@@ -146,6 +147,7 @@ if !strings.Contains(*server,":") {
 		UserConfig: userConfig,
 		Address:    *server,
 	}
+b.Config.Buffers=*buffers
 
 b.Hotkeys=b.UserConfig.GetHotkeys()
 b.UserConfig.SaveConfig()

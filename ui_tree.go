@@ -4,7 +4,7 @@ import (
 //"math"
 //	"fmt"
 	"github.com/bmmcginty/barnard/uiterm"
-	"github.com/bmmcginty/gumble/gumble"
+	"github.com/bmmcginty/barnard/gumble/gumble"
 	"sort"
 )
 

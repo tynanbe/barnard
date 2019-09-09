@@ -5,8 +5,8 @@ import (
 
 	"github.com/bmmcginty/barnard/uiterm"
 	"github.com/bmmcginty/barnard/config"
-	"github.com/bmmcginty/gumble/gumble"
-	"github.com/bmmcginty/gumble/gumbleopenal"
+	"github.com/bmmcginty/barnard/gumble/gumble"
+	"github.com/bmmcginty/barnard/gumble/gumbleopenal"
 )
 
 type Barnard struct {

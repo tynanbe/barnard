@@ -5,7 +5,7 @@ import (
 "github.com/bmmcginty/barnard/uiterm"
 "gopkg.in/yaml.v2"
 //	"encoding/yaml"
-	"github.com/bmmcginty/gumble/gumble"
+	"github.com/bmmcginty/barnard/gumble/gumble"
 	"io/ioutil"
 	"os"
 	"os/user"

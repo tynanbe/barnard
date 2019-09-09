@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/bmmcginty/barnard/uiterm"
-	"github.com/bmmcginty/gumble/gumble"
+	"github.com/bmmcginty/barnard/gumble/gumble"
 	"github.com/kennygrant/sanitize"
 )
 
