@@ -1,6 +1,9 @@
 package main
 
+import _ "net/http/pprof"
 import (
+"log"
+"net/http"
 "os/exec"
 "syscall"
 "io"
@@ -108,8 +111,16 @@ func main() {
 	serverSet := false
 	usernameSet := false
 	buffers := flag.Int("buffers", 8, "number of audio buffers to use")
+profile := flag.Bool("profile", false, "add http server to serve profiles")
 
 	flag.Parse()
+
+if (*profile == true) {
+go func() {
+log.Println(http.ListenAndServe("localhost:6060", nil))
+}()
+}
+
 	userConfig := config.NewConfig(cfgfn)
 
 	flag.CommandLine.Visit(func (theFlag *flag.Flag) {
@@ -176,6 +187,11 @@ b.notifyChannel = setup_notify_runner(*b.UserConfig.GetNotifyCommand())
 	b.Ui = uiterm.New(&b)
 	b.Ui.Run(reader)
 handle_error(b)
+}
+
+func handle_raw_error(e error) {
+fmt.Fprintf(os.Stderr,"%s\n",e.Error())
+os.Exit(1)
 }
 
 func handle_error(b Barnard) {
