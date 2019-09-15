@@ -111,7 +111,7 @@ func main() {
 	fifo := flag.String("fifo", "", "path of a FIFO from which to read commands")
 	serverSet := false
 	usernameSet := false
-	buffers := flag.Int("buffers", 8, "number of audio buffers to use")
+	buffers := flag.Int("buffers", 16, "number of audio buffers to use")
 	profile := flag.Bool("profile", false, "add http server to serve profiles")
 
 	flag.Parse()
