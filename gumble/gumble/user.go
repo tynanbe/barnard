@@ -1,9 +1,9 @@
 package gumble
 
 import (
-	"github.com/golang/protobuf/proto"
 	"github.com/bmmcginty/barnard/gumble/gumble/MumbleProto"
-"github.com/bmmcginty/go-openal/openal"
+	"github.com/bmmcginty/go-openal/openal"
+	"github.com/golang/protobuf/proto"
 )
 
 // User represents a user that is currently connected to the server.
@@ -51,13 +51,13 @@ type User struct {
 	client  *Client
 	decoder AudioDecoder
 
- AudioSource *openal.Source
-Boost uint16
- Volume float32
+	AudioSource *openal.Source
+	Boost       uint16
+	Volume      float32
 }
 
 func (u *User) GetClient() *Client {
-return u.client
+	return u.client
 }
 
 // SetTexture sets the user's texture.

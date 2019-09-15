@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bmmcginty/barnard/uiterm"
 	"github.com/bmmcginty/barnard/gumble/gumble"
+	"github.com/bmmcginty/barnard/uiterm"
 	"github.com/kennygrant/sanitize"
 )
 
@@ -36,12 +36,12 @@ func esc(str string) string {
 	return sanitize.HTML(str)
 }
 
-func(b *Barnard) Notify(event string, who string, what string) {
-b.notifyChannel <- []string{event,who,what}
+func (b *Barnard) Notify(event string, who string, what string) {
+	b.notifyChannel <- []string{event, who, what}
 }
 
-func(b *Barnard) Beep() {
-Beep()
+func (b *Barnard) Beep() {
+	Beep()
 }
 
 func (b *Barnard) SetSelectedUser(user *gumble.User) {
@@ -90,77 +90,77 @@ func (b *Barnard) OnTimestampToggle(ui *uiterm.Ui, key uiterm.Key) {
 }
 
 func (b *Barnard) UpdateGeneralStatus(text string, notice bool) {
-//		if (b.UiStatus.Text == text) {
-//return
-//}
-if(notice) {
+	//		if (b.UiStatus.Text == text) {
+	//return
+	//}
+	if notice {
 		b.UiStatus.Fg = uiterm.ColorWhite | uiterm.AttrBold
 		b.UiStatus.Bg = uiterm.ColorRed
-} else {
+	} else {
 		b.UiStatus.Fg = uiterm.ColorBlack
 		b.UiStatus.Bg = uiterm.ColorWhite
-}
-		b.UiStatus.Text = text
+	}
+	b.UiStatus.Text = text
 	b.Ui.Refresh()
 }
 
 func (b *Barnard) OnVoiceToggle(ui *uiterm.Ui, key uiterm.Key) {
-b.setTransmit(ui,2)
+	b.setTransmit(ui, 2)
 }
 
 func (b *Barnard) CommandLog(ui *uiterm.Ui, cmd string) {
-b.AddOutputLine("command "+cmd)
+	b.AddOutputLine("command " + cmd)
 }
 
 func (b *Barnard) CommandTalk(ui *uiterm.Ui, cmd string) {
-b.setTransmit(ui,2)
+	b.setTransmit(ui, 2)
 }
 
 func (b *Barnard) CommandMicUp(ui *uiterm.Ui, cmd string) {
-b.setTransmit(ui,1)
+	b.setTransmit(ui, 1)
 }
 
 func (b *Barnard) CommandMicDown(ui *uiterm.Ui, cmd string) {
-b.setTransmit(ui,0)
+	b.setTransmit(ui, 0)
 }
 
 func (b *Barnard) setTransmit(ui *uiterm.Ui, val int) {
-if b.Tx && val==1 {
-return
-}
-if b.Tx==false && val==0 {
-return
-}
-	if (b.Tx) {
-b.Notify("micdown","me","")
-b.Tx=false
-b.UpdateGeneralStatus(" Idle ",false)
+	if b.Tx && val == 1 {
+		return
+	}
+	if b.Tx == false && val == 0 {
+		return
+	}
+	if b.Tx {
+		b.Notify("micdown", "me", "")
+		b.Tx = false
+		b.UpdateGeneralStatus(" Idle ", false)
 		b.Stream.StopSource()
-} else if b.Connected==false {
-b.Notify("error","me","no tx while disconnected")
-b.Tx=false
-b.UpdateGeneralStatus("no tx while disconnected",true)
+	} else if b.Connected == false {
+		b.Notify("error", "me", "no tx while disconnected")
+		b.Tx = false
+		b.UpdateGeneralStatus("no tx while disconnected", true)
 	} else {
- b.Tx=true
+		b.Tx = true
 		err := b.Stream.StartSource(b.UserConfig.GetInputDevice())
 		if err != nil {
-b.Notify("error","me",err.Error())
-			b.UpdateGeneralStatus(err.Error(),true)
-} else {
-b.Notify("micup","me","")
-b.UpdateGeneralStatus(" Tx  ",true)
-} //if error transmit
-		} //not transmitting
-	} //func
+			b.Notify("error", "me", err.Error())
+			b.UpdateGeneralStatus(err.Error(), true)
+		} else {
+			b.Notify("micup", "me", "")
+			b.UpdateGeneralStatus(" Tx  ", true)
+		} //if error transmit
+	} //not transmitting
+} //func
 
 func (b *Barnard) OnMicVolumeDown(ui *uiterm.Ui, key uiterm.Key) {
-b.Stream.SetMicVolume(-0.1,true)
-b.UserConfig.SetMicVolume(b.Stream.GetMicVolume())
+	b.Stream.SetMicVolume(-0.1, true)
+	b.UserConfig.SetMicVolume(b.Stream.GetMicVolume())
 }
 
 func (b *Barnard) OnMicVolumeUp(ui *uiterm.Ui, key uiterm.Key) {
-b.Stream.SetMicVolume(0.1,true)
-b.UserConfig.SetMicVolume(b.Stream.GetMicVolume())
+	b.Stream.SetMicVolume(0.1, true)
+	b.UserConfig.SetMicVolume(b.Stream.GetMicVolume())
 }
 
 func (b *Barnard) OnQuitPress(ui *uiterm.Ui, key uiterm.Key) {
@@ -225,7 +225,7 @@ func (b *Barnard) GotoChat() {
 }
 
 func (b *Barnard) OnUiDoneInitialize(ui *uiterm.Ui) {
-b.start()
+	b.start()
 }
 
 func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
@@ -275,8 +275,8 @@ func (b *Barnard) OnUiInitialize(ui *uiterm.Ui) {
 	}
 	ui.Add(uiViewTree, &b.UiTree)
 
-//add this to see what your commands are coming in as raw strings
-//	b.Ui.AddCommandListener(b.CommandLog, "*")
+	//add this to see what your commands are coming in as raw strings
+	//	b.Ui.AddCommandListener(b.CommandLog, "*")
 	b.Ui.AddCommandListener(b.CommandMicUp, "micup")
 	b.Ui.AddCommandListener(b.CommandMicDown, "micdown")
 	b.Ui.AddCommandListener(b.CommandTalk, "toggle")

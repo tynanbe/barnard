@@ -1,4 +1,5 @@
 package uiterm
+
 //go:generate enumer -type=Key -trimprefix=Key -yaml -json -transform=snake
 
 /*
@@ -84,6 +85,7 @@ const (
 	KeyBackspace2     Key = 0x7F
 	KeyCtrl8          Key = 0x7F
 )
+
 //##altkeys##
 
 const(

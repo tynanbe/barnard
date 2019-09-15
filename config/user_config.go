@@ -1,10 +1,10 @@
 package config
 
 import (
-"fmt"
-"github.com/bmmcginty/barnard/uiterm"
-"gopkg.in/yaml.v2"
-//	"encoding/yaml"
+	"fmt"
+	"github.com/bmmcginty/barnard/uiterm"
+	"gopkg.in/yaml.v2"
+	//	"encoding/yaml"
 	"github.com/bmmcginty/barnard/gumble/gumble"
 	"io/ioutil"
 	"os"
@@ -14,19 +14,19 @@ import (
 )
 
 type Config struct {
-config *exportableConfig
- fn string
+	config *exportableConfig
+	fn     string
 }
 
 type exportableConfig struct {
- Hotkeys *Hotkeys
- MicVolume *float32
-InputDevice *string
-OutputDevice *string
-	Servers []*server
+	Hotkeys       *Hotkeys
+	MicVolume     *float32
+	InputDevice   *string
+	OutputDevice  *string
+	Servers       []*server
 	DefaultServer *string
-	Username *string
- NotifyCommand *string
+	Username      *string
+	NotifyCommand *string
 }
 
 type server struct {
@@ -37,79 +37,79 @@ type server struct {
 
 type eUser struct {
 	Username string
- Boost uint16
+	Boost    uint16
 	Volume   float32
 }
 
 func (c *Config) SaveConfig() {
-var data []byte
-		data, err := yaml.Marshal(c.config)
-if err != nil {
-panic(err)
-}
-	err = ioutil.WriteFile(c.fn+".tmp",data,0600)
-if err!= nil {
-panic(err)
-}
-err = os.Rename(c.fn+".tmp",c.fn)
-if err != nil {
-panic(err)
-}
+	var data []byte
+	data, err := yaml.Marshal(c.config)
+	if err != nil {
+		panic(err)
+	}
+	err = ioutil.WriteFile(c.fn+".tmp", data, 0600)
+	if err != nil {
+		panic(err)
+	}
+	err = os.Rename(c.fn+".tmp", c.fn)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func key(k uiterm.Key) *uiterm.Key {
-return &k
+	return &k
 }
 
 func (c *Config) LoadConfig() {
-		var jc exportableConfig
-jc=exportableConfig{}
-	jc.Hotkeys=&Hotkeys{
-Talk: key(uiterm.KeyF1),
-VolumeDown: key(uiterm.KeyF5),
-VolumeUp: key(uiterm.KeyF6),
-Exit: key(uiterm.KeyF10),
-ToggleTimestamps: key(uiterm.KeyF3),
-SwitchViews: key(uiterm.KeyTab),
-ScrollUp: key(uiterm.KeyPgup),
-ScrollDown: key(uiterm.KeyPgdn),
-}
+	var jc exportableConfig
+	jc = exportableConfig{}
+	jc.Hotkeys = &Hotkeys{
+		Talk:             key(uiterm.KeyF1),
+		VolumeDown:       key(uiterm.KeyF5),
+		VolumeUp:         key(uiterm.KeyF6),
+		Exit:             key(uiterm.KeyF10),
+		ToggleTimestamps: key(uiterm.KeyF3),
+		SwitchViews:      key(uiterm.KeyTab),
+		ScrollUp:         key(uiterm.KeyPgup),
+		ScrollDown:       key(uiterm.KeyPgdn),
+	}
 	if fileExists(c.fn) {
 		var data []byte
 		data = readFile(c.fn)
 		if data != nil {
-		err := yaml.UnmarshalStrict(data, &jc)
-		if err != nil {
-fmt.Fprintf(os.Stderr,"Error parsing \"%s\".\n%s\n",c.fn,err.Error())
-os.Exit(1)
-		} //panic
-} //if data
-} //if exists
-		c.config = &jc
-if c.config.MicVolume == nil {
-micvol := float32(1.0)
-jc.MicVolume=&micvol
-}
-if c.config.InputDevice == nil {
-idev := string("")
-jc.InputDevice=&idev
-}
-if c.config.OutputDevice == nil {
-odev := string("")
-jc.OutputDevice=&odev
-}
-if c.config.DefaultServer == nil {
-defaultServer := string("localhost:64738")
-jc.DefaultServer = &defaultServer
-}
-if c.config.Username == nil {
-username := string("")
-jc.Username = &username
-}
-if c.config.NotifyCommand == nil {
-ncmd := string("")
-jc.NotifyCommand=&ncmd
-}
+			err := yaml.UnmarshalStrict(data, &jc)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error parsing \"%s\".\n%s\n", c.fn, err.Error())
+				os.Exit(1)
+			} //panic
+		} //if data
+	} //if exists
+	c.config = &jc
+	if c.config.MicVolume == nil {
+		micvol := float32(1.0)
+		jc.MicVolume = &micvol
+	}
+	if c.config.InputDevice == nil {
+		idev := string("")
+		jc.InputDevice = &idev
+	}
+	if c.config.OutputDevice == nil {
+		odev := string("")
+		jc.OutputDevice = &odev
+	}
+	if c.config.DefaultServer == nil {
+		defaultServer := string("localhost:64738")
+		jc.DefaultServer = &defaultServer
+	}
+	if c.config.Username == nil {
+		username := string("")
+		jc.Username = &username
+	}
+	if c.config.NotifyCommand == nil {
+		ncmd := string("")
+		jc.NotifyCommand = &ncmd
+	}
 }
 
 func (c *Config) findServer(address string) *server {
@@ -150,8 +150,8 @@ func (c *Config) findUser(address string, username string) *eUser {
 	if t == nil {
 		t = &eUser{
 			Username: username,
-Boost: uint16(1),
-Volume: 1.0,
+			Boost:    uint16(1),
+			Volume:   1.0,
 		}
 		s.Users = append(s.Users, t)
 	}
@@ -159,61 +159,61 @@ Volume: 1.0,
 }
 
 func (c *Config) SetMicVolume(v float32) {
-t := float32(v)
-c.config.MicVolume=&t
+	t := float32(v)
+	c.config.MicVolume = &t
 }
 
 func (c *Config) GetHotkeys() *Hotkeys {
-return c.config.Hotkeys
+	return c.config.Hotkeys
 }
 
 func (c *Config) GetNotifyCommand() *string {
-return c.config.NotifyCommand
+	return c.config.NotifyCommand
 }
 
 func (c *Config) GetInputDevice() *string {
-return c.config.InputDevice
+	return c.config.InputDevice
 }
 
 func (c *Config) GetOutputDevice() *string {
-return c.config.OutputDevice
+	return c.config.OutputDevice
 }
 
 func (c *Config) GetDefaultServer() *string {
-return c.config.DefaultServer
+	return c.config.DefaultServer
 }
 
 func (c *Config) GetUsername() *string {
-return c.config.Username
+	return c.config.Username
 }
 
 func (c *Config) UpdateUser(u *gumble.User) {
 	var j *eUser
-var uc *gumble.Client
-uc=u.GetClient()
-if uc != nil {
-	j = c.findUser(uc.Config.Address, u.Name)
-u.Boost=j.Boost
-u.Volume=j.Volume
-if u.Boost < 1 {
-u.Boost = 1
-}
-}
+	var uc *gumble.Client
+	uc = u.GetClient()
+	if uc != nil {
+		j = c.findUser(uc.Config.Address, u.Name)
+		u.Boost = j.Boost
+		u.Volume = j.Volume
+		if u.Boost < 1 {
+			u.Boost = 1
+		}
+	}
 }
 
 func (c *Config) UpdateConfig(u *gumble.User) {
 	var j *eUser
 	j = c.findUser(u.GetClient().Config.Address, u.Name)
- j.Boost=u.Boost
+	j.Boost = u.Boost
 	j.Volume = u.Volume
 }
 
 func NewConfig(fn *string) *Config {
 	var c *Config
 	c = &Config{}
-c.fn=resolvePath(*fn)
-c.LoadConfig()
-return c
+	c.fn = resolvePath(*fn)
+	c.LoadConfig()
+	return c
 }
 
 func readFile(path string) []byte {
@@ -245,7 +245,7 @@ func resolvePath(path string) string {
 		if strings.Contains(path, "$HOME") {
 			path = strings.Replace(path, "$HOME", hd, 1)
 		} else {
-			path = strings.Replace(path,"~",hd,1)
+			path = strings.Replace(path, "~", hd, 1)
 		}
 	}
 	return path
@@ -261,23 +261,21 @@ func makeHostPort(addr string) (string, int) {
 	return host, port
 }
 
-
 func Log(s string) {
-log(s)
+	log(s)
 }
 
 func log(s string) {
-s+="\n"
-    // If the file doesn't exist, create it, or append to the file
-    f, err := os.OpenFile("log.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-    if err != nil {
-panic(err)
-    }
-    if _, err := f.Write([]byte(s)); err != nil {
-panic(err)
-    }
-    if err := f.Close(); err != nil {
-panic(err)
-    }
+	s += "\n"
+	// If the file doesn't exist, create it, or append to the file
+	f, err := os.OpenFile("log.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
+	if _, err := f.Write([]byte(s)); err != nil {
+		panic(err)
+	}
+	if err := f.Close(); err != nil {
+		panic(err)
+	}
 }
-

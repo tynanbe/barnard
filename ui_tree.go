@@ -1,10 +1,10 @@
 package main
 
 import (
-//"math"
-//	"fmt"
-	"github.com/bmmcginty/barnard/uiterm"
+	//"math"
+	//	"fmt"
 	"github.com/bmmcginty/barnard/gumble/gumble"
+	"github.com/bmmcginty/barnard/uiterm"
 	"sort"
 )
 
@@ -18,7 +18,7 @@ func (ti TreeItem) String() string {
 		return ti.User.Name
 	}
 	if ti.Channel != nil {
-		return "#"+ti.Channel.Name
+		return "#" + ti.Channel.Name
 	}
 	return ""
 }
@@ -37,47 +37,47 @@ func (b *Barnard) TreeItemCharacter(ui *uiterm.Ui, tree *uiterm.Tree, item uiter
 }
 
 func (b *Barnard) changeVolume(users []*gumble.User, change float32) {
-for _,u := range users {
-au := u.AudioSource
-if au==nil {
-continue
-}
-var boost uint16
-var cv float32
-var ng float32
-var curboost float32
-curboost = float32((u.Boost-1))/10
-cv = au.GetGain() + curboost
-ng = cv+change
-boost = uint16(1)
-//b.AddOutputLine(fmt.Sprintf("cv %.2f change %.2f ng %.2f",cv,change,ng))
-if ng > 1.0 {
-//1.0 will give volume of one and boost of 1
-//1.1 will give volume of 1 and boost of 2
-//b.AddOutputLine(fmt.Sprintf("partperc %.2f",(ng*10)))
-perc := uint16((ng*10))-10
-perc+=1
-boost=perc
-ng=1.0
-}
-if ng < 0 {
-ng=0.0
-}
-//b.AddOutputLine(fmt.Sprintf("boost %d ng %.2f",boost,ng))
-u.Boost=boost
-u.Volume=ng
-				au.SetGain(ng)
-b.UserConfig.UpdateConfig(u)
-}
-b.UserConfig.SaveConfig()
+	for _, u := range users {
+		au := u.AudioSource
+		if au == nil {
+			continue
+		}
+		var boost uint16
+		var cv float32
+		var ng float32
+		var curboost float32
+		curboost = float32((u.Boost - 1)) / 10
+		cv = au.GetGain() + curboost
+		ng = cv + change
+		boost = uint16(1)
+		//b.AddOutputLine(fmt.Sprintf("cv %.2f change %.2f ng %.2f",cv,change,ng))
+		if ng > 1.0 {
+			//1.0 will give volume of one and boost of 1
+			//1.1 will give volume of 1 and boost of 2
+			//b.AddOutputLine(fmt.Sprintf("partperc %.2f",(ng*10)))
+			perc := uint16((ng * 10)) - 10
+			perc += 1
+			boost = perc
+			ng = 1.0
+		}
+		if ng < 0 {
+			ng = 0.0
+		}
+		//b.AddOutputLine(fmt.Sprintf("boost %d ng %.2f",boost,ng))
+		u.Boost = boost
+		u.Volume = ng
+		au.SetGain(ng)
+		b.UserConfig.UpdateConfig(u)
+	}
+	b.UserConfig.SaveConfig()
 }
 
 func makeUsersArray(users gumble.Users) []*gumble.User {
-t := make([]*gumble.User,0,len(users))
-for _,u := range users {
-t=append(t,u)
-}
-return t
+	t := make([]*gumble.User, 0, len(users))
+	for _, u := range users {
+		t = append(t, u)
+	}
+	return t
 }
 
 func (b *Barnard) TreeItemKeyPress(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm.TreeItem, key uiterm.Key) {
@@ -101,20 +101,20 @@ func (b *Barnard) TreeItemKeyPress(ui *uiterm.Ui, tree *uiterm.Tree, item uiterm
 	if treeItem.Channel != nil {
 		var c = treeItem.Channel
 		if key == *b.Hotkeys.VolumeDown {
-b.changeVolume(makeUsersArray(c.Users),-0.1)
-}
+			b.changeVolume(makeUsersArray(c.Users), -0.1)
+		}
 		if key == *b.Hotkeys.VolumeUp {
-b.changeVolume(makeUsersArray(c.Users),0.1)
-}
-		} //set volume
+			b.changeVolume(makeUsersArray(c.Users), 0.1)
+		}
+	} //set volume
 	if treeItem.User != nil {
 		var u = treeItem.User
 		if key == *b.Hotkeys.VolumeDown {
-b.changeVolume([]*gumble.User{u},-0.1)
-}
+			b.changeVolume([]*gumble.User{u}, -0.1)
+		}
 		if key == *b.Hotkeys.VolumeUp {
-b.changeVolume([]*gumble.User{u},0.1)
-}
+			b.changeVolume([]*gumble.User{u}, 0.1)
+		}
 	} //user highlighted
 } //func
 

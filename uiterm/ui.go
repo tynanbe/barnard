@@ -2,7 +2,7 @@ package uiterm
 
 import (
 	"errors"
-"strings"
+	"strings"
 	"sync/atomic"
 
 	"github.com/nsf/termbox-go"
@@ -27,7 +27,7 @@ type Ui struct {
 	elements      map[string]*uiElement
 	activeElement *uiElement
 
-	keyListeners map[Key][]KeyListener
+	keyListeners     map[Key][]KeyListener
 	commandListeners map[string][]CommandListener
 }
 
@@ -39,10 +39,10 @@ type uiElement struct {
 
 func New(manager UiManager) *Ui {
 	ui := &Ui{
-		close:        make(chan bool, 10),
-		elements:     make(map[string]*uiElement),
-		manager:      manager,
-		keyListeners: make(map[Key][]KeyListener),
+		close:            make(chan bool, 10),
+		elements:         make(map[string]*uiElement),
+		manager:          manager,
+		keyListeners:     make(map[Key][]KeyListener),
 		commandListeners: make(map[string][]CommandListener),
 	}
 	return ui
@@ -119,24 +119,24 @@ func (ui *Ui) Run(cmds chan string) error {
 		select {
 		case <-ui.close:
 			return nil
-  case cmd := <-cmds:
-ui.onCommandEvent(cmd)
+		case cmd := <-cmds:
+			ui.onCommandEvent(cmd)
 		case event := <-events:
 			switch event.Type {
 			case termbox.EventResize:
 				ui.manager.OnUiResize(ui, event.Width, event.Height)
 				ui.Refresh()
 			case termbox.EventKey:
-var k = uint32(event.Key)
-				if event.Ch != 0 && event.Mod!=0 {
-k=uint32(event.Ch)
-}
-				if event.Ch != 0 && event.Mod==0 {
+				var k = uint32(event.Key)
+				if event.Ch != 0 && event.Mod != 0 {
+					k = uint32(event.Ch)
+				}
+				if event.Ch != 0 && event.Mod == 0 {
 					ui.onCharacterEvent(event.Ch)
 				} else {
-if event.Mod > 0 {
-k = k + (uint32(event.Mod) << 16)
-}
+					if event.Mod > 0 {
+						k = k + (uint32(event.Mod) << 16)
+					}
 					ui.onKeyEvent(Key(k))
 				}
 			}
@@ -162,12 +162,12 @@ func (ui *Ui) onKeyEvent(key Key) {
 }
 
 func (ui *Ui) onCommandEvent(cmd string) {
- ta := strings.SplitN(cmd," ",2)
-t := ta[0]
-rest := ""
-if len(ta)==2 {
-rest=ta[1]
-}
+	ta := strings.SplitN(cmd, " ", 2)
+	t := ta[0]
+	rest := ""
+	if len(ta) == 2 {
+		rest = ta[1]
+	}
 	if ui.commandListeners[t] != nil {
 		for _, listener := range ui.commandListeners[t] {
 			listener(ui, rest)
@@ -178,9 +178,9 @@ rest=ta[1]
 			listener(ui, cmd)
 		}
 	}
-//	if ui.activeElement != nil {
-//		ui.activeElement.View.uiKeyEvent(key)
-//	}
+	//	if ui.activeElement != nil {
+	//		ui.activeElement.View.uiKeyEvent(key)
+	//	}
 }
 
 func (ui *Ui) Add(name string, view View) error {
@@ -206,14 +206,13 @@ func (ui *Ui) SetBounds(name string, x0, y0, x1, y1 int) error {
 }
 
 func (ui *Ui) AddKeyListener(listener KeyListener, key *Key) {
-if key!=nil {
-	ui.keyListeners[*key] = append(ui.keyListeners[*key], listener)
-}
+	if key != nil {
+		ui.keyListeners[*key] = append(ui.keyListeners[*key], listener)
+	}
 }
 
 func (ui *Ui) AddCommandListener(listener CommandListener, cmd string) {
-//if cmd!=nil {
+	//if cmd!=nil {
 	ui.commandListeners[cmd] = append(ui.commandListeners[cmd], listener)
-//}
+	//}
 }
-

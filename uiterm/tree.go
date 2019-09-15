@@ -18,10 +18,10 @@ type renderedTreeItem struct {
 }
 
 type Tree struct {
-	Fg, Bg    Attribute
-	Generator func(item TreeItem) []TreeItem
-	KeyListener  func(ui *Ui, tree *Tree, item TreeItem, key Key)
-	CharacterListener  func(ui *Ui, tree *Tree, item TreeItem, chr rune)
+	Fg, Bg            Attribute
+	Generator         func(item TreeItem) []TreeItem
+	KeyListener       func(ui *Ui, tree *Tree, item TreeItem, key Key)
+	CharacterListener func(ui *Ui, tree *Tree, item TreeItem, chr rune)
 
 	lines      []renderedTreeItem
 	activeLine int
@@ -72,7 +72,7 @@ func (t *Tree) Rebuild() {
 		}
 	}
 	t.lines = lines
-	t.SetActiveLine(0,true)
+	t.SetActiveLine(0, true)
 	t.uiDraw()
 }
 
@@ -95,7 +95,6 @@ func (t *Tree) rebuild_rec(parent TreeItem, level int) []renderedTreeItem {
 	return lines
 }
 
-
 func (t *Tree) uiDraw() {
 	t.ui.beginDraw()
 	defer t.ui.endDraw()
@@ -104,27 +103,27 @@ func (t *Tree) uiDraw() {
 		t.Rebuild()
 	}
 
-if t.y1-t.y0 <= 0 {
-return
-}
+	if t.y1-t.y0 <= 0 {
+		return
+	}
 
-var	line = t.activeLine
-var height=t.y1-t.y0
-var startline=0
-//var total = len(t.lines)
-//I'd welcome a better algorithm for this; for that matter, I'd love a book or reference for all sorts of GUI algorithms.
-//if (startline+height) < line {
-for startline=0; (startline+height) <= line; startline+=height {
-}
-//}
-//if startline+height >= total {
-//var rem=(startline+height)-total
-//startline-=rem
-//}
-if (startline < 0) {
-startline = 0
-}
-line=startline
+	var line = t.activeLine
+	var height = t.y1 - t.y0
+	var startline = 0
+	//var total = len(t.lines)
+	//I'd welcome a better algorithm for this; for that matter, I'd love a book or reference for all sorts of GUI algorithms.
+	//if (startline+height) < line {
+	for startline = 0; (startline + height) <= line; startline += height {
+	}
+	//}
+	//if startline+height >= total {
+	//var rem=(startline+height)-total
+	//startline-=rem
+	//}
+	if startline < 0 {
+		startline = 0
+	}
+	line = startline
 	for y := t.y0; y < t.y1; y++ {
 		var reader *strings.Reader
 		var item TreeItem
@@ -156,31 +155,31 @@ line=startline
 }
 
 func (t *Tree) SetActiveLine(num int, relative bool) {
-if relative {
+	if relative {
 		t.activeLine = bounded(t.activeLine+num, 0, len(t.lines)-1)
-} else {
+	} else {
 		t.activeLine = bounded(num, 0, len(t.lines)-1)
-}
+	}
 }
 
 func (t *Tree) uiKeyEvent(key Key) {
-var runHandler=true
+	var runHandler = true
 	switch key {
 	case KeyArrowUp:
-t.SetActiveLine(-1, true)
-runHandler=false
+		t.SetActiveLine(-1, true)
+		runHandler = false
 	case KeyArrowDown:
-t.SetActiveLine(1, true)
-runHandler=false
-}
-if runHandler==true && t.KeyListener != nil {
-			t.KeyListener(t.ui, t, t.lines[t.activeLine].Item, key)
-		}
+		t.SetActiveLine(1, true)
+		runHandler = false
+	}
+	if runHandler == true && t.KeyListener != nil {
+		t.KeyListener(t.ui, t, t.lines[t.activeLine].Item, key)
+	}
 	t.uiDraw()
 }
 
 func (t *Tree) uiCharacterEvent(ch rune) {
-if (t.CharacterListener!=nil) {
-t.CharacterListener(t.ui, t, t.lines[t.activeLine].Item, ch)
-}
+	if t.CharacterListener != nil {
+		t.CharacterListener(t.ui, t, t.lines[t.activeLine].Item, ch)
+	}
 }

@@ -12,8 +12,8 @@ type Config struct {
 	// Password used when authenticating with the server. A password is not
 	// usually required to connect to a server.
 	Password string
-//the address to use
-Address string
+	//the address to use
+	Address string
 	// The initial access tokens to the send to the server. Access tokens can be
 	// resent to the server using:
 	//  client.Send(config.Tokens)
@@ -28,13 +28,13 @@ Address string
 	// The event listeners used when client events are triggered.
 	Listeners      Listeners
 	AudioListeners AudioListeners
- Buffers int
+	Buffers        int
 }
 
 // NewConfig returns a new Config struct with default values set.
 func NewConfig() *Config {
 	return &Config{
-Buffers: 8,
+		Buffers:        8,
 		AudioInterval:  AudioDefaultInterval,
 		AudioDataBytes: AudioDefaultDataBytes,
 	}

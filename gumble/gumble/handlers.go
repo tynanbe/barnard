@@ -9,9 +9,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/bmmcginty/barnard/gumble/gumble/MumbleProto"
 	"github.com/bmmcginty/barnard/gumble/gumble/varint"
+	"github.com/golang/protobuf/proto"
 )
 
 var (

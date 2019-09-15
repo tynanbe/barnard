@@ -11,9 +11,9 @@ import (
 )
 
 var (
-	ErrState = errors.New("gumbleopenal: invalid state")
-	ErrMic   = errors.New("gumbleopenal: microphone disconnected or misconfigured")
-	ErrInputDevice = errors.New("gumbleopenal: invalid input device or parameters")
+	ErrState        = errors.New("gumbleopenal: invalid state")
+	ErrMic          = errors.New("gumbleopenal: microphone disconnected or misconfigured")
+	ErrInputDevice  = errors.New("gumbleopenal: invalid input device or parameters")
 	ErrOutputDevice = errors.New("gumbleopenal: invalid output device or parameters")
 )
 
@@ -41,27 +41,27 @@ type Stream struct {
 }
 
 func New(client *gumble.Client, inputDevice *string, outputDevice *string, test bool) (*Stream, error) {
-frmsz := 480
-if !test {
-frmsz = client.Config.AudioFrameSize()
-}
-
-idev := openal.CaptureOpenDevice(*inputDevice, gumble.AudioSampleRate, openal.FormatMono16, uint32(frmsz))
-	if idev == nil {
-return nil,ErrInputDevice
+	frmsz := 480
+	if !test {
+		frmsz = client.Config.AudioFrameSize()
 	}
 
-odev := openal.OpenDevice(*outputDevice)
-if odev==nil {
-idev.CaptureCloseDevice()
-return nil,ErrOutputDevice
-}
+	idev := openal.CaptureOpenDevice(*inputDevice, gumble.AudioSampleRate, openal.FormatMono16, uint32(frmsz))
+	if idev == nil {
+		return nil, ErrInputDevice
+	}
 
-if test {
-idev.CaptureCloseDevice()
-odev.CloseDevice()
-return nil,nil
-}
+	odev := openal.OpenDevice(*outputDevice)
+	if odev == nil {
+		idev.CaptureCloseDevice()
+		return nil, ErrOutputDevice
+	}
+
+	if test {
+		idev.CaptureCloseDevice()
+		odev.CloseDevice()
+		return nil, nil
+	}
 
 	s := &Stream{
 		client:          client,
@@ -69,19 +69,19 @@ return nil,nil
 	}
 
 	s.deviceSource = idev
-if s.deviceSource==nil {
-return nil,ErrInputDevice
-}
+	if s.deviceSource == nil {
+		return nil, ErrInputDevice
+	}
 
 	s.deviceSink = odev
-if s.deviceSink==nil {
-return nil,ErrOutputDevice
-}
+	if s.deviceSink == nil {
+		return nil, ErrOutputDevice
+	}
 	s.contextSink = s.deviceSink.CreateContext()
-if s.contextSink == nil {
-s.Destroy();
-return nil,ErrOutputDevice
-}
+	if s.contextSink == nil {
+		s.Destroy()
+		return nil, ErrOutputDevice
+	}
 	s.contextSink.Activate()
 
 	return s, nil
@@ -92,12 +92,12 @@ func (s *Stream) AttachStream(client *gumble.Client) {
 }
 
 func (s *Stream) Destroy() {
-if(s.link!=nil) {
-	s.link.Detach()
-}
+	if s.link != nil {
+		s.link.Detach()
+	}
 	if s.deviceSource != nil {
-			s.StopSource()
-			s.deviceSource.CaptureCloseDevice()
+		s.StopSource()
+		s.deviceSource.CaptureCloseDevice()
 		s.deviceSource = nil
 	}
 	if s.deviceSink != nil {
@@ -172,21 +172,21 @@ func (s *Stream) OnAudioStream(e *gumble.AudioStreamEvent) {
 		}
 		var raw [gumble.AudioMaximumFrameSize * 2]byte
 		for packet := range e.C {
-var boost uint16 = uint16(1)
+			var boost uint16 = uint16(1)
 			samples := len(packet.AudioBuffer)
 			if samples > cap(raw) {
 				continue
 			}
-boost=e.User.Boost
-if boost>1 {
-			for i, value := range packet.AudioBuffer {
-				binary.LittleEndian.PutUint16(raw[i*2:], uint16(value)*boost)
-			}
-} else {
-			for i, value := range packet.AudioBuffer {
-				binary.LittleEndian.PutUint16(raw[i*2:], uint16(value))
-			}
-} //no boost
+			boost = e.User.Boost
+			if boost > 1 {
+				for i, value := range packet.AudioBuffer {
+					binary.LittleEndian.PutUint16(raw[i*2:], uint16(value)*boost)
+				}
+			} else {
+				for i, value := range packet.AudioBuffer {
+					binary.LittleEndian.PutUint16(raw[i*2:], uint16(value))
+				}
+			} //no boost
 			reclaim()
 			if len(emptyBufs) == 0 {
 				continue

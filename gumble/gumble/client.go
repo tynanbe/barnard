@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/bmmcginty/barnard/gumble/gumble/MumbleProto"
+	"github.com/golang/protobuf/proto"
 )
 
 // State is the current state of the client's connection to the server.

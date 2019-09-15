@@ -1,8 +1,8 @@
 package gumble
 
 import (
-	"github.com/golang/protobuf/proto"
 	"github.com/bmmcginty/barnard/gumble/gumble/MumbleProto"
+	"github.com/golang/protobuf/proto"
 )
 
 // ACL contains a list of ACLGroups and ACLRules linked to a channel.
