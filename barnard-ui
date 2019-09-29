@@ -111,7 +111,7 @@ function add-server() {
     if ! [[ "$serverPort" =~ ^[0-9]+ ]]; then
         serverPort=64738
     fi
-    mumbleServerList[$serverName]="${serverAddress}:${serverPort}"
+    mumbleServerList[$serverName]="${serverAddress%%:*}:${serverPort}"
     echo "declare -Ag mumbleServerList=(" > ~/.config/barnard/servers.conf
     for i in "${!mumbleServerList[@]}" ; do
         echo "[${i}]=\"${mumbleServerList[$i]}\"" >> ~/.config/barnard/servers.conf
@@ -129,7 +129,9 @@ connect() {
     if [[ -z "$serverName" || "$serverName" == "Go Back" ]]; then
         return
     fi
-    command barnard -username ${USER}-${HOSTNAME} -server ${mumbleServerList[$serverName]} --fifo ~/.config/barnard/cmd |& log
+    local username="$(grep '^username: .*$' ~/.barnard.yaml 2> /dev/null | cut -d ' ' -f2-)"
+    username="${username//[[:space:]]/_}"
+    command barnard -username "${username:-${USER}-${HOSTNAME}}" -server ${mumbleServerList[$serverName]} --fifo ~/.config/barnard/cmd --buffers 16 |& log
 }
 
 remove-server() {
