@@ -131,6 +131,7 @@ connect() {
     fi
     local username="$(grep '^username: .*$' ~/.barnard.yaml 2> /dev/null | cut -d ' ' -f2-)"
     username="${username//[[:space:]]/_}"
+    username="${username//\"/}"
     command barnard -username "${username:-${USER}-${HOSTNAME}}" -server ${mumbleServerList[$serverName]} --fifo ~/.config/barnard/cmd --buffers 16 |& log
 }
 
