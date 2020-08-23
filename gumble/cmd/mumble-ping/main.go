@@ -1,4 +1,4 @@
-package main // import "github.com/bmmcginty/barnard/gumble/cmd/mumble-ping"
+package main // import "github.com/BenOnions/barnard/gumble/cmd/mumble-ping"
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/bmmcginty/barnard/gumble/gumble"
+	"github.com/BenOnions/barnard/gumble/gumble"
 )
 
 func main() {

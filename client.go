@@ -5,9 +5,9 @@ import (
 	"net"
 	"time"
 
-	"github.com/bmmcginty/barnard/gumble/gumble"
-	"github.com/bmmcginty/barnard/gumble/gumbleopenal"
-	"github.com/bmmcginty/barnard/gumble/gumbleutil"
+	"github.com/BenOnions/barnard/gumble/gumble"
+	"github.com/BenOnions/barnard/gumble/gumbleopenal"
+	"github.com/BenOnions/barnard/gumble/gumbleutil"
 )
 
 func (b *Barnard) start() {

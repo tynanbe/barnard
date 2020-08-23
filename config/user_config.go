@@ -2,10 +2,10 @@ package config
 
 import (
 	"fmt"
-	"github.com/bmmcginty/barnard/uiterm"
+	"github.com/BenOnions/barnard/uiterm"
 	"gopkg.in/yaml.v2"
 	//	"encoding/yaml"
-	"github.com/bmmcginty/barnard/gumble/gumble"
+	"github.com/BenOnions/barnard/gumble/gumble"
 	"io/ioutil"
 	"os"
 	"os/user"

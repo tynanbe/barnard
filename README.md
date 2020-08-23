@@ -149,7 +149,7 @@ Requirements:
 
 To fetch and build:
 
-    go get -u github.com/bmmcginty/barnard
+    go get -u github.com/BenOnions/barnard
 
 After running the command above, `barnard` will be compiled as `$(go env GOPATH)/bin/barnard`.
 
@@ -173,4 +173,4 @@ GPLv2
 ## Contributors
 
 Tim Cooper (<tim.cooper@layeh.com>)
-Brandon McGinty-Carroll (<bmmcginty.barnard@bmcginty.us>)
+Brandon McGinty-Carroll (<BenOnions.barnard@bmcginty.us>)

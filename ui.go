@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bmmcginty/barnard/gumble/gumble"
-	"github.com/bmmcginty/barnard/uiterm"
+	"github.com/BenOnions/barnard/gumble/gumble"
+	"github.com/BenOnions/barnard/uiterm"
 	"github.com/kennygrant/sanitize"
 )
 

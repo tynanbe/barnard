@@ -1,6 +1,6 @@
 # Note
 
-Added from github.com/bmmcginty/barnard/gumble for ease of future work and development.
+Added from github.com/BenOnions/barnard/gumble for ease of future work and development.
 
 # gumble
 

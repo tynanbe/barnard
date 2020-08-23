@@ -1,1 +1,1 @@
-package varint // import "github.com/bmmcginty/barnard/gumble/gumble/varint"
+package varint // import "github.com/BenOnions/barnard/gumble/gumble/varint"

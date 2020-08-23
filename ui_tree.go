@@ -3,8 +3,8 @@ package main
 import (
 	//"math"
 	//	"fmt"
-	"github.com/bmmcginty/barnard/gumble/gumble"
-	"github.com/bmmcginty/barnard/uiterm"
+	"github.com/BenOnions/barnard/gumble/gumble"
+	"github.com/BenOnions/barnard/uiterm"
 	"sort"
 )
 

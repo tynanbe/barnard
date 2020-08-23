@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/bmmcginty/barnard/uiterm"
+	"github.com/BenOnions/barnard/uiterm"
 )
 
 type Hotkeys struct {

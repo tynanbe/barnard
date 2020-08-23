@@ -15,16 +15,16 @@ import (
 	//"github.com/google/shlex"
 	"crypto/tls"
 	"flag"
+	"github.com/BenOnions/barnard/config"
 	"github.com/alessio/shellescape"
-	"github.com/bmmcginty/barnard/config"
 
-	"github.com/bmmcginty/barnard/gumble/gumble"
-	_ "github.com/bmmcginty/barnard/gumble/opus"
-	"github.com/bmmcginty/barnard/uiterm"
-	"github.com/bmmcginty/go-openal/openal"
+	"github.com/BenOnions/barnard/gumble/gumble"
+	_ "github.com/BenOnions/barnard/gumble/opus"
+	"github.com/BenOnions/barnard/uiterm"
+	"github.com/BenOnions/go-openal/openal"
 )
 
-func show_devs(name string, args []string) {
+func showDevs(name string, args []string) {
 	if args == nil {
 		fmt.Printf("no items for %s\n", name)
 	}
@@ -34,32 +34,29 @@ func show_devs(name string, args []string) {
 	}
 }
 
-func do_list_devices() {
+func doListDevices() {
 	odevs := openal.GetStrings(openal.AllDevicesSpecifier)
 	if odevs != nil && len(odevs) > 0 {
-		show_devs("All outputs:", odevs)
+		showDevs("All outputs:", odevs)
 	} else {
 		odevs = openal.GetStrings(openal.DeviceSpecifier)
-		show_devs("All outputs:", odevs)
+		showDevs("All outputs:", odevs)
 	}
 	idevs := openal.GetStrings(openal.CaptureDeviceSpecifier)
-	show_devs("Inputs:", idevs)
+	showDevs("Inputs:", idevs)
 }
 
-func setup_notify_runner(notify_command string) chan []string {
+func setupNotifyRunner(notifyCommand string) chan []string {
 	t := make(chan []string)
-	var do_nothing = false
-	var err error
-	if err != nil {
+	var doNothing = false
+	if notifyCommand == "" {
+		doNothing = true
 	}
-	if notify_command == "" {
-		do_nothing = true
-	}
-	go func(events chan []string, cmd_template string, dummy bool) {
+	go func(events chan []string, cmdTemplate string, dummy bool) {
 		for {
 			event := <-events
 			if !dummy {
-				t := string(cmd_template)
+				t := cmdTemplate
 				t = strings.ReplaceAll(t, "%event", shellescape.Quote(event[0]))
 				t = strings.ReplaceAll(t, "%who", shellescape.Quote(event[1]))
 				t = strings.ReplaceAll(t, "%what", shellescape.Quote(event[2]))
@@ -69,11 +66,11 @@ func setup_notify_runner(notify_command string) chan []string {
 				x.Run()
 			} //if we actually have a command to run
 		} //for
-	}(t, notify_command, do_nothing)
+	}(t, notifyCommand, doNothing)
 	return t
 }
 
-func setup_fifo(fn string) (chan string, error) {
+func setupFifo(fn string) (chan string, error) {
 	t := make(chan string)
 	if fn == "" {
 		return t, nil
@@ -107,7 +104,7 @@ func main() {
 	insecure := flag.Bool("insecure", false, "skip server certificate verification")
 	certificate := flag.String("certificate", "", "PEM encoded certificate and private key")
 	cfgfn := flag.String("config", "~/.barnard.yaml", "Path to YAML formatted configuration file")
-	list_devices := flag.Bool("list_devices", false, "do not connect; instead, list available audio devices and exit")
+	listDevices := flag.Bool("list_devices", false, "do not connect; instead, list available audio devices and exit")
 	fifo := flag.String("fifo", "", "path of a FIFO from which to read commands")
 	serverSet := false
 	usernameSet := false
@@ -144,13 +141,13 @@ func main() {
 		os.Setenv("ALSOFT_LOGLEVEL", "0")
 	}
 
-	if *list_devices {
-		do_list_devices()
+	if *listDevices {
+		doListDevices()
 		os.Exit(0)
 	}
 
 	if !strings.Contains(*server, ":") {
-		*server = (*server + ":64738")
+		*server = *server + ":64738"
 	}
 
 	// Initialize
@@ -178,24 +175,24 @@ func main() {
 		b.TLSConfig.Certificates = append(b.TLSConfig.Certificates, cert)
 	}
 
-	reader, err := setup_fifo(*fifo)
+	reader, err := setupFifo(*fifo)
 	if err != nil {
 		b.exitMessage = err.Error()
 		b.exitStatus = 1
-		handle_error(b)
+		handleError(b)
 	}
-	b.notifyChannel = setup_notify_runner(*b.UserConfig.GetNotifyCommand())
+	b.notifyChannel = setupNotifyRunner(*b.UserConfig.GetNotifyCommand())
 	b.Ui = uiterm.New(&b)
 	b.Ui.Run(reader)
-	handle_error(b)
+	handleError(b)
 }
 
-func handle_raw_error(e error) {
+func handleRawError(e error) {
 	fmt.Fprintf(os.Stderr, "%s\n", e.Error())
 	os.Exit(1)
 }
 
-func handle_error(b Barnard) {
+func handleError(b Barnard) {
 	if b.exitMessage != "" {
 		fmt.Fprintf(os.Stderr, "%s\n", b.exitMessage)
 	}

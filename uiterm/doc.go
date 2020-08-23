@@ -1,1 +1,1 @@
-package uiterm // import "github.com/bmmcginty/barnard/uiterm"
+package uiterm // import "github.com/BenOnions/barnard/uiterm"

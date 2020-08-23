@@ -1,8 +1,8 @@
 package gumble
 
 import (
-	"github.com/bmmcginty/barnard/gumble/gumble/MumbleProto"
-	"github.com/bmmcginty/go-openal/openal"
+	"github.com/BenOnions/barnard/gumble/gumble/MumbleProto"
+	"github.com/BenOnions/go-openal/openal"
 	"github.com/golang/protobuf/proto"
 )
 
