@@ -1,4 +1,4 @@
-package gumbleopenal // import "github.com/BenOnions/barnard/gumble/gumbleopenal"
+package gumbleopenal // import "github.com/tynanbe/barnard/gumble/gumbleopenal"
 
 import (
 	"encoding/binary"
@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/BenOnions/barnard/gumble/gumble"
+	"github.com/tynanbe/barnard/gumble/gumble"
 	"github.com/Windblade-GR01/go-openal/openal"
 )
 

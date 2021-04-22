@@ -1,2 +1,2 @@
 // barnard is a terminal based client for the Mumble VoIP system.
-package main // import "github.com/BenOnions/barnard"
+package main // import "github.com/tynanbe/barnard"

@@ -1,9 +1,9 @@
-package gumbleutil // import "github.com/BenOnions/barnard/gumble/gumbleutil"
+package gumbleutil // import "github.com/tynanbe/barnard/gumble/gumbleutil"
 
 import (
 	"time"
 
-	"github.com/BenOnions/barnard/gumble/gumble"
+	"github.com/tynanbe/barnard/gumble/gumble"
 )
 
 var autoBitrate = &Listener{

@@ -15,12 +15,12 @@ import (
 	//"github.com/google/shlex"
 	"crypto/tls"
 	"flag"
-	"github.com/BenOnions/barnard/config"
+	"github.com/tynanbe/barnard/config"
 	"github.com/alessio/shellescape"
 
-	"github.com/BenOnions/barnard/gumble/gumble"
-	_ "github.com/BenOnions/barnard/gumble/opus"
-	"github.com/BenOnions/barnard/uiterm"
+	"github.com/tynanbe/barnard/gumble/gumble"
+	_ "github.com/tynanbe/barnard/gumble/opus"
+	"github.com/tynanbe/barnard/uiterm"
 	"github.com/Windblade-GR01/go-openal/openal"
 )
 

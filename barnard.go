@@ -3,10 +3,10 @@ package main
 import (
 	"crypto/tls"
 
-	"github.com/BenOnions/barnard/config"
-	"github.com/BenOnions/barnard/gumble/gumble"
-	"github.com/BenOnions/barnard/gumble/gumbleopenal"
-	"github.com/BenOnions/barnard/uiterm"
+	"github.com/tynanbe/barnard/config"
+	"github.com/tynanbe/barnard/gumble/gumble"
+	"github.com/tynanbe/barnard/gumble/gumbleopenal"
+	"github.com/tynanbe/barnard/uiterm"
 )
 
 type Barnard struct {

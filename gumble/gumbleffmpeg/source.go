@@ -1,4 +1,4 @@
-package gumbleffmpeg // import "github.com/BenOnions/barnard/gumble/gumbleffmpeg"
+package gumbleffmpeg // import "github.com/tynanbe/barnard/gumble/gumbleffmpeg"
 
 import (
 	"io"

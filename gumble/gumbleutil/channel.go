@@ -1,7 +1,7 @@
-package gumbleutil // import "github.com/BenOnions/barnard/gumble/gumbleutil"
+package gumbleutil // import "github.com/tynanbe/barnard/gumble/gumbleutil"
 
 import (
-	"github.com/BenOnions/barnard/gumble/gumble"
+	"github.com/tynanbe/barnard/gumble/gumble"
 )
 
 // ChannelPath returns a slice of channel names, starting from the root channel

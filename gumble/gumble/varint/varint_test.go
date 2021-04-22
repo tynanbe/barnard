@@ -1,4 +1,4 @@
-package varint // import "github.com/BenOnions/barnard/gumble/gumble/varint"
+package varint // import "github.com/tynanbe/barnard/gumble/gumble/varint"
 
 import "testing"
 

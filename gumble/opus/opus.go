@@ -1,7 +1,7 @@
-package opus // import "github.com/BenOnions/barnard/gumble/opus"
+package opus // import "github.com/tynanbe/barnard/gumble/opus"
 
 import (
-	"github.com/BenOnions/barnard/gumble/gumble"
+	"github.com/tynanbe/barnard/gumble/gumble"
 	"layeh.com/gopus"
 )
 

@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/BenOnions/barnard/gumble/gumble/MumbleProto"
-	"github.com/BenOnions/barnard/gumble/gumble/varint"
+	"github.com/tynanbe/barnard/gumble/gumble/MumbleProto"
+	"github.com/tynanbe/barnard/gumble/gumble/varint"
 	"github.com/golang/protobuf/proto"
 )
 

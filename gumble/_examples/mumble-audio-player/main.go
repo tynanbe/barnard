@@ -1,4 +1,4 @@
-package main // import "github.com/BenOnions/barnard/gumble/_examples/mumble-audio-player"
+package main // import "github.com/tynanbe/barnard/gumble/_examples/mumble-audio-player"
 
 import (
 	"flag"
@@ -6,10 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/BenOnions/barnard/gumble/gumble"
-	"github.com/BenOnions/barnard/gumble/gumbleffmpeg"
-	"github.com/BenOnions/barnard/gumble/gumbleutil"
-	_ "github.com/BenOnions/barnard/gumble/opus"
+	"github.com/tynanbe/barnard/gumble/gumble"
+	"github.com/tynanbe/barnard/gumble/gumbleffmpeg"
+	"github.com/tynanbe/barnard/gumble/gumbleutil"
+	_ "github.com/tynanbe/barnard/gumble/opus"
 )
 
 func main() {
