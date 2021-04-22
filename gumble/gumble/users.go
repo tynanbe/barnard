@@ -1,7 +1,7 @@
 package gumble
 
 import (
-//	"github.com/BenOnions/go-openal/openal"
+//	"github.com/Windblade-GR01/go-openal/openal"
 )
 
 // Users is a map of server users.

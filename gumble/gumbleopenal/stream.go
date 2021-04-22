@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/BenOnions/barnard/gumble/gumble"
-	"github.com/BenOnions/go-openal/openal"
+	"github.com/Windblade-GR01/go-openal/openal"
 )
 
 var (

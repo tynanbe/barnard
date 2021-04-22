@@ -21,7 +21,7 @@ import (
 	"github.com/BenOnions/barnard/gumble/gumble"
 	_ "github.com/BenOnions/barnard/gumble/opus"
 	"github.com/BenOnions/barnard/uiterm"
-	"github.com/BenOnions/go-openal/openal"
+	"github.com/Windblade-GR01/go-openal/openal"
 )
 
 func showDevs(name string, args []string) {

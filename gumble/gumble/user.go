@@ -2,7 +2,7 @@ package gumble
 
 import (
 	"github.com/BenOnions/barnard/gumble/gumble/MumbleProto"
-	"github.com/BenOnions/go-openal/openal"
+	"github.com/Windblade-GR01/go-openal/openal"
 	"github.com/golang/protobuf/proto"
 )
 
